@@ -45,6 +45,8 @@ final class Impact
         'sankce' => ['za_co' => 160, 'vyse' => 80],
         'rizika' => ['popis' => 240, 'pojistka' => 200],
         'scenare' => ['titulek' => 90, 'kdo' => 80, 'pribeh' => 420, 'pojistka' => 200],
+        'pomuze' => ['kdo' => 80, 'jak' => 160],
+        'pritizi' => ['kdo' => 80, 'jak' => 160],
     ];
     private const MAX_ITEMS = 4;
     private const MAX_GROUPS = 6;
@@ -57,11 +59,13 @@ final class Impact
 - "pravomoci": nové nebo rozšířené pravomoci státu, úřadů, policie, obcí nebo soukromých subjektů vůči lidem ("kdo" ji získá, "co" smí).
 - "sankce": nové nebo vyšší pokuty, zákazy a jiné tresty ("za_co", "vyse" např. „až 500 000 Kč“).
 - "rizika": nejvýš 3 místa, kde text dává pravomoc, výjimku nebo volné uvážení bez jasně vymezených mezí, takže by šel použít i jinak nebo šíře, než ohlašuje účel. "popis" věcně popíše mechanismus (co text umožňuje a jaké meze chybí), bez spekulací o úmyslech a bez jmen. "pojistka": co tentýž text výslovně omezuje (soudní přezkum, podmínky, lhůty, souhlas, kontrola); když v textu žádná není, napiš „v textu návrhu neuvedena“. Když riziko nevidíš, dej prázdné pole; běžné povinnosti a sankce rizikem nejsou.
+- "zbystrit": jedna věta do 120 znaků pro běžného čtenáře, proč by měl zbystřit (nejdůležitější přímý dopad nebo sporné místo), bez hodnocení; u čistě technické úpravy prázdný řetězec.
+- "pomuze" a "pritizi": nejvýš 3 skupiny lidí nebo firem, kterým text přímo přidá (peníze, práva, úlevy, výjimky), a nejvýš 3, kterým přímo přitíží (náklady, povinnosti, omezení, sankce, ztráta nároku). "kdo" konkrétně (např. „důchodci od 80 let“, „zaměstnavatelé do 10 zaměstnanců“), "jak" krátce a s čísly z textu. Jen přímé dopady, které text uvádí; nepřímé dopady, odhady a politické hodnocení vynech.
 - "scenare": nejvýš 2 modelové situace „nejhorší čtení“ pro konkrétního člověka nebo firmu z dotčených skupin (např. „OSVČ s paušální daní“, „obec do 2 000 obyvatel“, „chovatel psa“). "titulek" krátce shrne, co se mu může stát, "kdo" je ta modelová osoba, "pribeh" ve 2 až 3 větách popíše, co mu text při doslovném a nejpřísnějším čtení uloží nebo umožní vůči němu (lhůty, částky, pravomoci přesně podle textu), "pojistka" co tomu v textu brání (nebo „v textu návrhu neuvedena“). Žádné spekulace o úmyslech, o tom, co úřady udělají, ani čísla, která v textu nejsou. Když text nikomu nic podstatného neukládá, dej prázdné pole.
-U povinností, pravomocí, sankcí, rizik a scénářů uveď nejvýš 4 nejdůležitější položky a u každé "citace": jedna věta zkopírovaná z textu přesně znak po znaku, která ji dokládá. Položku bez takové citace vynech.
+U povinností, pravomocí, sankcí, rizik, scénářů a skupin v "pomuze" a "pritizi" uveď nejvýš 4 nejdůležitější položky a u každé "citace": jedna věta zkopírovaná z textu přesně znak po znaku, která ji dokládá. Položku bez takové citace vynech.
 TXT;
 
-    public const FORMAT_EXAMPLE = '"dopad": {"skupiny": ["klíč"], "ucinnost": {"text": "…", "citace": "…"}, "povinnosti": [{"kdo": "…", "co": "…", "citace": "…"}], "pravomoci": [{"kdo": "…", "co": "…", "citace": "…"}], "sankce": [{"za_co": "…", "vyse": "…", "citace": "…"}], "rizika": [{"popis": "…", "pojistka": "…", "citace": "…"}], "scenare": [{"titulek": "…", "kdo": "…", "pribeh": "…", "pojistka": "…", "citace": "…"}]}';
+    public const FORMAT_EXAMPLE = '"dopad": {"skupiny": ["klíč"], "ucinnost": {"text": "…", "citace": "…"}, "povinnosti": [{"kdo": "…", "co": "…", "citace": "…"}], "pravomoci": [{"kdo": "…", "co": "…", "citace": "…"}], "sankce": [{"za_co": "…", "vyse": "…", "citace": "…"}], "rizika": [{"popis": "…", "pojistka": "…", "citace": "…"}], "scenare": [{"titulek": "…", "kdo": "…", "pribeh": "…", "pojistka": "…", "citace": "…"}], "zbystrit": "…", "pomuze": [{"kdo": "…", "jak": "…", "citace": "…"}], "pritizi": [{"kdo": "…", "jak": "…", "citace": "…"}]}';
 
     public static function prompt(): string
     {
@@ -125,7 +129,8 @@ TXT;
                 $groups[] = $g;
             }
         }
-        $out = ['skupiny' => array_slice($groups, 0, self::MAX_GROUPS), 'ucinnost' => null];
+        $out = ['skupiny' => array_slice($groups, 0, self::MAX_GROUPS), 'ucinnost' => null,
+            'zbystrit' => $clean($impact['zbystrit'] ?? '', 140)];
 
         $u = $impact['ucinnost'] ?? null;
         if (is_array($u) && $clean($u['text'] ?? '', 120) !== '' && $clean($u['citace'] ?? '', 600) !== '') {
@@ -148,7 +153,7 @@ TXT;
                 $row['citace'] = $clean($item['citace'], 600);
                 $items[] = $row;
             }
-            $out[$list] = array_slice($items, 0, match ($list) { 'rizika' => 3, 'scenare' => 2, default => self::MAX_ITEMS });
+            $out[$list] = array_slice($items, 0, match ($list) { 'rizika', 'pomuze', 'pritizi' => 3, 'scenare' => 2, default => self::MAX_ITEMS });
         }
         return $out;
     }
@@ -159,7 +164,7 @@ TXT;
         if ($impact === null) {
             return false;
         }
-        if ($impact['skupiny'] !== [] || $impact['ucinnost'] !== null) {
+        if ($impact['skupiny'] !== [] || $impact['ucinnost'] !== null || ($impact['zbystrit'] ?? '') !== '') {
             return true;
         }
         foreach (array_keys(self::LISTS) as $list) {

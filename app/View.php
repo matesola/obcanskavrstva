@@ -232,6 +232,9 @@ final class View
         }
         $quote = fn(string $q): string => '<details class="impact-quote"><summary>Citace</summary><blockquote class="quote">' . e($q) . '</blockquote></details>';
         $html = '<div class="impact" id="dopad"><h3>Co to znamená pro lidi</h3>';
+        if ($impact['zbystrit'] !== '') {
+            $html .= '<p><strong>Proč zbystřit:</strong> ' . e($impact['zbystrit']) . '</p>';
+        }
         if ($impact['skupiny'] !== []) {
             $html .= '<p class="chips"><span class="muted small">Týká se:</span> ';
             foreach (Impact::groupLabels($impact['skupiny']) as $label) {
@@ -243,6 +246,8 @@ final class View
             $html .= '<div class="impact-when"><strong>Platí od:</strong> ' . e($impact['ucinnost']['text']) . $quote($impact['ucinnost']['citace']) . '</div>';
         }
         $lists = [
+            'pomuze' => ['Komu pomůže', fn(array $i) => '<strong>' . e($i['kdo']) . ':</strong> ' . e($i['jak'])],
+            'pritizi' => ['Komu přitíží', fn(array $i) => '<strong>' . e($i['kdo']) . ':</strong> ' . e($i['jak'])],
             'povinnosti' => ['Nové povinnosti', fn(array $i) => '<strong>' . e($i['kdo']) . ':</strong> ' . e($i['co'])],
             'pravomoci' => ['Nové pravomoci', fn(array $i) => '<strong>' . e($i['kdo']) . ':</strong> ' . e($i['co'])],
             'sankce' => ['Sankce', fn(array $i) => e($i['za_co']) . ($i['vyse'] !== '' ? ': <strong>' . e($i['vyse']) . '</strong>' : '')],
