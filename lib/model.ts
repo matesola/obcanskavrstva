@@ -36,12 +36,15 @@ export type BillView = {
   extra: string; // další text pro hledání (koho se týká)
 };
 
-/** Věta z rozboru AI uložená v důvodech skóre Hlídače („Rozbor textu návrhu: závažnost 6/10 – …“). */
-export function aiSentence(b: Bill): string | null {
+/**
+ * Věta z rozboru AI uložená v důvodech skóre Hlídače („Rozbor textu návrhu: závažnost 6/10 – …“).
+ * Rozlišuje text návrhu a pozměňovací návrh, aby se jeden nevydával za druhý.
+ */
+export function aiSentence(b: Bill): { text: string; pn: string | null } | null {
   for (const key of ["ai_bill", "ai"]) {
     const r = b.duvody.find((d) => d.klic === key);
-    const m = r?.popis.match(/závažnost \d+\/10\s*[–—-]\s*(.+?)(?:;|$)/);
-    if (m) return m[1].trim();
+    const m = r?.popis.match(/závažnost \d+\/10\s*[\u2013\u2014-]\s*(.+?)(?:;|$)/);
+    if (m) return { text: m[1].trim(), pn: key === "ai" ? (r?.popis.match(/PN č\. (\d+)/)?.[1] ?? "") : null };
   }
   return null;
 }
@@ -62,7 +65,7 @@ export function view(b: Bill, detail?: BillDetail | null): BillView {
   const roleSources = [
     { label: "vysvětlení", text: [civic ?? "", ...(sit?.pomuze ?? []), ...(sit?.pritizi ?? []), ...(sit?.koho ?? [])].map((x) => (typeof x === "string" ? x : `${x.kdo} ${x.jak}`)).join(" · ") },
     { label: "název", text: b.uplny_nazev.replace(/^Návrh (?:posla|zastupitel)[^,]*? na vydání /i, "") },
-    ...(ai ? [{ label: "rozbor Hlídače", text: ai }] : []),
+    ...(ai ? [{ label: "rozbor Hlídače", text: ai.text }] : []),
   ];
   // nejdřív dopady přímo z textu návrhu, pak ty, které závisí na pozměňovacím návrhu
   const textFirst = (l: Who[] = []) => [...l].sort((a, b) => Number(a.zdroj.startsWith("PN")) - Number(b.zdroj.startsWith("PN")));
@@ -73,8 +76,8 @@ export function view(b: Bill, detail?: BillDetail | null): BillView {
     title: civic ?? law,
     titleSource: upTitle ? "rozbor Hlídače" : civic ? "Občanská vrstva" : "název návrhu",
     law,
-    summary: b.rozbor?.perex || ai,
-    summarySource: b.rozbor?.perex || ai ? "rozbor textu na Hlídači zákonů (AI)" : null,
+    summary: b.rozbor?.perex || (ai ? (ai.pn !== null ? `Pozměňovací návrh${ai.pn ? ` č. ${ai.pn}` : ""}: ${ai.text}` : ai.text) : null),
+    summarySource: b.rozbor?.perex || (ai && ai.pn === null) ? "rozbor textu návrhu na Hlídači zákonů (AI)" : ai ? "rozbor pozměňovacího návrhu na Hlídači zákonů (AI); platí, jen pokud projde" : null,
     roles: classify(roleSources),
     pomuze,
     pritizi,
