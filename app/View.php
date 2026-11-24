@@ -247,6 +247,8 @@ final class View
             'pravomoci' => ['Nové pravomoci', fn(array $i) => '<strong>' . e($i['kdo']) . ':</strong> ' . e($i['co'])],
             'sankce' => ['Sankce', fn(array $i) => e($i['za_co']) . ($i['vyse'] !== '' ? ': <strong>' . e($i['vyse']) . '</strong>' : '')],
             'rizika' => ['Rizika a pojistky', fn(array $i) => e($i['popis']) . ($i['pojistka'] !== '' ? '<br><span class="muted">Pojistka: ' . e($i['pojistka']) . '</span>' : '')],
+            'scenare' => ['Nejhorší čtení', fn(array $i) => '<strong>' . e($i['titulek']) . '</strong>' . ($i['kdo'] !== '' ? ' <span class="muted">(' . e($i['kdo']) . ')</span>' : '')
+                . '<br>' . e($i['pribeh']) . ($i['pojistka'] !== '' ? '<br><span class="muted">Co tomu brání: ' . e($i['pojistka']) . '</span>' : '')],
         ];
         foreach ($lists as $key => [$title, $line]) {
             if ($impact[$key] === []) {
@@ -259,7 +261,7 @@ final class View
             $html .= '</ul>';
         }
         $html .= '<p class="muted small">Popis dopadu připravil jazykový model (AI) a může se mýlit. Nehodnotí, zda je změna dobrá, a do skóre nevstupuje.'
-            . ($impact['rizika'] !== [] ? ' Rizika popisují, co text umožňuje, ne co kdo zamýšlí; pojistky mohou být i v platném zákoně, který návrh mění.' : '')
+            . ($impact['rizika'] !== [] || $impact['scenare'] !== [] ? ' Rizika a nejhorší čtení popisují, co text umožňuje, ne co kdo zamýšlí; pojistky mohou být i v platném zákoně, který návrh mění.' : '')
             . '</p></div>';
         return $html;
     }

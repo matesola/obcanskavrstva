@@ -320,6 +320,8 @@ $impactRaw = [
     'povinnosti' => [['kdo' => 'Úřady', 'co' => 'Zahájit řízení do 4 let', 'citace' => $q221], ['kdo' => 'x', 'co' => 'bez citace']],
     'pravomoci' => [],
     'sankce' => 'nesmysl',
+    'scenare' => [['titulek' => 'Úřad má na vrácení dotace jen 4 roky', 'kdo' => 'obec, která dotaci poskytla', 'pribeh' => 'Řízení o odvodu lze zahájit nejpozději do 4 let.', 'pojistka' => 'v textu návrhu neuvedena', 'citace' => $q221],
+        ['titulek' => 'bez citace', 'kdo' => 'x', 'pribeh' => 'y']],
     'rizika' => [['popis' => 'Kratší lhůta omezuje vymáhání neoprávněně čerpaných dotací.', 'pojistka' => 'v textu návrhu neuvedena', 'citace' => $q221],
         ['popis' => 'Vymyšlené riziko', 'pojistka' => '', 'citace' => 'Věta, která v textu návrhu vůbec není, ale je dost dlouhá.']],
 ];
@@ -336,7 +338,7 @@ $impactReviewer = new Hlidac\AiReviewer(db(), config());
 $impactReviewer->saveResult('tisk', 221, ['zavaznost' => 8, 'titulek' => 'Lhůta pro vymáhání dotací se zkracuje na 4 roky', 'citace' => [$q221], 'dopad' => $impactRaw], 'claude-sonnet-5-5');
 $stored = json_decode((string)db()->value('SELECT ai_json FROM tisk_text WHERE ct = 221'), true);
 check('dopad: neověřené citace z rozboru vyřazeny', [$stored['dopad']['ucinnost'], count($stored['dopad']['rizika']), count($stored['dopad']['povinnosti'])], [null, 1, 1]);
-check('dopad: vyřazení je zapsané v korekcích', in_array('z dopadu vyřazeny položky bez citace ověřené v textu (3)', $stored['upravy'] ?? [], true), true);
+check('dopad: vyřazení je zapsané v korekcích', in_array('z dopadu vyřazeny položky bez citace ověřené v textu (4)', $stored['upravy'] ?? [], true), true);
 check('dopad: do závažnosti nevstupuje', (int)db()->value('SELECT ai_score FROM tisk_text WHERE ct = 221'), 8);
 $_GET = ['ct' => '221'];
 ob_start();
@@ -344,8 +346,10 @@ ob_start();
     require $file;
 })(APP_ROOT . '/tisk.php');
 $htmlImpact = (string)ob_get_clean();
+check('dopad: nejhorší čtení s ověřenou citací', [count($stored['dopad']['scenare']), $stored['dopad']['scenare'][0]['kdo'] ?? null], [1, 'obec, která dotaci poskytla']);
 check('dopad: detail tisku ukazuje skupiny a rizika', str_contains($htmlImpact, 'Co to znamená pro lidi') && str_contains($htmlImpact, 'Příjemci dotací')
-    && str_contains($htmlImpact, 'Rizika a pojistky') && !str_contains($htmlImpact, 'Vymyšlené riziko'), true);
+    && str_contains($htmlImpact, 'Rizika a pojistky') && !str_contains($htmlImpact, 'Vymyšlené riziko')
+    && str_contains($htmlImpact, 'Nejhorší čtení') && str_contains($htmlImpact, 'Úřad má na vrácení dotace jen 4 roky'), true);
 $apiImpact = (new Hlidac\Api(db(), new Hlidac\Repo(db()), config()))->bill(221)['dopad'] ?? null;
 check('dopad: api.php?tisk= vrací skupiny s názvy', $apiImpact['skupiny'][0] ?? null, ['klic' => 'prijemci_dotaci', 'nazev' => 'Příjemci dotací']);
 $apiObj = new Hlidac\Api(db(), new Hlidac\Repo(db()), config());
