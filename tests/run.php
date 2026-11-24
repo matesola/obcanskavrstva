@@ -346,8 +346,20 @@ check('dopad: do závažnosti nevstupuje', (int)db()->value('SELECT ai_score FRO
 check('dopad: pomůže s citací, přitíží bez citace vyřazeno, proč zbystřit', [count($stored['dopad']['pomuze']), count($stored['dopad']['pritizi']), $stored['dopad']['zbystrit']],
     [1, 0, 'Lhůta pro vymáhání dotací se zkracuje na 4 roky.']);
 check('dopad: nejhorší čtení s ověřenou citací', [count($stored['dopad']['scenare']), $stored['dopad']['scenare'][0]['kdo'] ?? null], [1, 'obec, která dotaci poskytla']);
+$apiImpact = (new Hlidac\Api(db(), new Hlidac\Repo(db()), config()))->bill(221)['dopad'] ?? null;
+check('dopad: api.php?tisk= vrací skupiny s názvy', $apiImpact['skupiny'][0] ?? null, ['klic' => 'prijemci_dotaci', 'nazev' => 'Příjemci dotací']);
+$apiObj = new Hlidac\Api(db(), new Hlidac\Repo(db()), config());
+$apiDetail = $apiObj->bill(221);
+check('api: rozbor v detailu (titulek, shrnutí, závažnost)', [$apiDetail['rozbor']['titulek'] ?? null, $apiDetail['rozbor']['zavaznost'] ?? null, $apiDetail['rozbor']['skupiny'] ?? null],
+    ['Lhůta pro vymáhání dotací se zkracuje na 4 roky', 8, ['prijemci_dotaci', 'obce']]);
+check('api: hlavní nález s citací', $apiDetail['hlavni_nalez']['citace'] ?? null, $q221);
+$apiList = array_column($apiObj->bills(Hlidac\Api::filters(['limit' => '500'])), null, 'ct');
+check('api: seznam nese rozbor se skupinami (filtr Týká se mě)', $apiList[221]['rozbor']['skupiny'] ?? null, ['prijemci_dotaci', 'obce']);
+check('api: seznam bez shrnutí (jen detail)', array_key_exists('shrnuti', $apiList[221]['rozbor'] ?? []), false);
+check('api: tisk bez rozboru má rozbor null', array_key_exists('rozbor', $apiList[90] ?? ['rozbor' => null]) && ($apiList[90]['rozbor'] ?? null) === null, true);
 db()->run('UPDATE tisk_text SET ai_json = ?, ai_score = ?, ai_at = ?, ai_model = ?, ai_prompt = ?, ai_runs = ?, ai_run_count = ?, ai_prev_json = ?, ai_prev_score = ?, ai_prev_model = ? WHERE ct = 221',
     array_values($keep221));
+check('dopad: api bez dopadu vrací null', (new Hlidac\Api(db(), new Hlidac\Repo(db()), config()))->bill(221)['dopad'], null);
 db()->run("UPDATE tisky SET posledni = '2020-01-01', faze = '1. čtení' WHERE ct = 221"); // rozpracovaný, dlouho bez aktivity
 $scorer->scoreBills();
 $_GET = [];
