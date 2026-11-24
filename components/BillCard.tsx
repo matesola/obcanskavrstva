@@ -2,7 +2,22 @@ import Link from "next/link";
 import type { Bill } from "@/lib/api";
 import { GROUPS, LEVEL, date, kind, perex, subtitle, title } from "@/lib/text";
 import Path from "./Path";
-import type { Situation } from "@/lib/situace";
+import { condition, type Situation, type Who } from "@/lib/situace";
+
+function Side({ sign, label, list }: { sign: string; label: string; list?: Who[] }) {
+  if (!list || list.length === 0) return null;
+  return (
+    <ul className={`pm pm-${sign === "▲" ? "plus" : "minus"}`} aria-label={label}>
+      {list.slice(0, 2).map((w) => (
+        <li key={w.kdo}>
+          <span className="pm-sign" aria-hidden="true">{sign}</span>
+          <span><b>{w.kdo}</b>: {w.jak}{condition(w.zdroj) && <span className="pm-cond"> ({condition(w.zdroj)})</span>}</span>
+        </li>
+      ))}
+      {list.length > 2 && <li className="pm-more">a {list.length - 2} další v detailu</li>}
+    </ul>
+  );
+}
 
 export default function BillCard({ b, sit }: { b: Bill; sit?: Situation | null }) {
   const groups = b.rozbor?.skupiny ?? [];
@@ -18,9 +33,12 @@ export default function BillCard({ b, sit }: { b: Bill; sit?: Situation | null }
         {b.posledni_zmena && <span>{date(b.posledni_zmena)}</span>}
       </div>
       <h3>{title(b)}</h3>
-      {sub && <p className="sub">{sub}</p>}
-      {p && !worst && <p className="perex">{p}</p>}
-      {sit && (
+      {sub && !(sit?.zbystrit && !b.rozbor?.titulek) && <p className="sub">{sub}</p>}
+      {sit?.zbystrit && <p className="alert"><span className="alert-label">Proč zbystřit</span> {sit.zbystrit}</p>}
+      {p && !worst && !sit?.zbystrit && <p className="perex">{p}</p>}
+      <Side sign="▲" label="Komu pomůže" list={sit?.pomuze} />
+      <Side sign="▼" label="Komu přitíží" list={sit?.pritizi} />
+      {sit && sit.koho.length > 0 && !(sit.pomuze?.length || sit.pritizi?.length) && (
         <p className="who-line">
           <b>Koho:</b> {sit.koho.slice(0, 3).map((k) => k.kdo).join(" · ")}
           {sit.koho.length > 3 ? ` a další` : ""}

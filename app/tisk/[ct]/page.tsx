@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { bill, type ImpactItem } from "@/lib/api";
 import { GROUPS, LEVEL, date, kind, perex, subtitle, title } from "@/lib/text";
 import Path from "@/components/Path";
-import { resolved } from "@/lib/situace";
+import { condition, resolved, type Who } from "@/lib/situace";
 
 export const revalidate = 900; // musí být literál (Next.js), shodně s REVALIDATE v lib/api.ts
 
@@ -34,6 +34,23 @@ function Quote({ text }: { text: string }) {
       <summary>Citace ze zákona</summary>
       <blockquote>{text}</blockquote>
     </details>
+  );
+}
+
+function Side({ title, sign, list }: { title: string; sign: string; list?: Who[] }) {
+  if (!list || list.length === 0) return null;
+  return (
+    <section className="block">
+      <h2>{title}</h2>
+      <ul className={`items pm-detail pm-${sign === "▲" ? "plus" : "minus"}`}>
+        {list.map((w) => (
+          <li key={w.kdo + w.jak}>
+            <span className="pm-sign" aria-hidden="true">{sign}</span> <span className="who">{w.kdo}</span>: {w.jak}
+            <span className="guard">{condition(w.zdroj) ?? w.zdroj}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
@@ -75,9 +92,21 @@ export default async function BillPage({ params }: Props) {
       {sub && <p className="official">{sub}</p>}
       {p && <p>{p}</p>}
 
+      {sit?.zbystrit && (
+        <p className="alert alert-big"><span className="alert-label">Proč zbystřit</span> {sit.zbystrit}</p>
+      )}
+      <Side title="Komu pomůže" sign="▲" list={sit?.pomuze} />
+      <Side title="Komu přitíží" sign="▼" list={sit?.pritizi} />
+      {(sit?.pomuze?.length || sit?.pritizi?.length) ? (
+        <p className="small">
+          Pomůže a přitíží popisuje přímé dopady textu (peníze, povinnosti, práva), ne hodnocení, zda je zákon dobrý.
+          Shrnuto z rozboru textu a pozměňovacích návrhů na <a href={b.url}>Hlídači zákonů</a>.
+        </p>
+      ) : null}
+
       {sit && sit.koho.length > 0 && (
         <section className="block">
-          <h2>Koho se to týká</h2>
+          <h2>{sit.pomuze?.length || sit.pritizi?.length ? "Koho dál se to týká" : "Koho se to týká"}</h2>
           <ul className="items who">
             {sit.koho.map((k) => (
               <li key={k.kdo}>

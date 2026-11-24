@@ -130,3 +130,18 @@ a.card:active { transform: translate(1px, 1px); box-shadow: 3px 3px 0 -1.5px var
 .worst .guard-line { font-size: 15px; color: #d9d4c7; }
 .worst .quote summary { color: #bdb7a8; }
 .worst .quote blockquote { color: var(--ink); }
+
+/* proč zbystřit, komu pomůže, komu přitíží */
+.alert { font: 700 17px/1.35 var(--display); font-stretch: 102%; margin: 0 0 12px; }
+.alert-label { background: var(--marker); padding: 1px 6px; border-radius: 3px; font: 800 11px/1.6 var(--text); letter-spacing: 0.1em; text-transform: uppercase; vertical-align: 2px; margin-right: 4px; }
+.alert-big { font-size: clamp(20px, 5vw, 24px); margin: 18px 0 0; }
+.pm { list-style: none; margin: 0 0 8px; padding: 0; font-size: 14px; display: grid; gap: 4px; }
+.pm li { display: grid; grid-template-columns: 16px 1fr; gap: 6px; align-items: baseline; }
+.pm-sign { font-size: 11px; }
+.pm-plus .pm-sign { color: #1d7a3a; }
+.pm-minus .pm-sign { color: #b4231b; }
+.pm-cond { color: var(--muted); }
+.pm-more { color: var(--muted); grid-template-columns: 1fr !important; padding-left: 22px; }
+.pm-detail li { font-size: 16px; }
+.list-alert { display: block; font-style: normal; font-size: 14px; color: var(--ink); margin: 2px 0; }
+.card .pm + .path, .card .alert + .path { margin-top: 12px; }

@@ -8,7 +8,7 @@ import type { BillDetail, PnResult } from "./api";
 
 export type Who = { kdo: string; jak: string; zdroj: string };
 export type Worst = { titulek: string; pribeh: string; podminka: string; pojistka: string; citace: string[]; zdroj: string };
-export type Situation = { faze?: string; koho: Who[]; nejhorsi: Worst[] };
+export type Situation = { faze?: string; zbystrit?: string; pomuze?: Who[]; pritizi?: Who[]; koho: Who[]; nejhorsi: Worst[] };
 
 const all = (data as unknown as { tisky: Record<string, Situation> }).tisky;
 
@@ -46,13 +46,21 @@ function verdict(nums: number[], results: PnResult[]): Verdict {
 export function resolved(ct: number, detail?: BillDetail | null): Situation | null {
   // 1) data z Hlídače mají přednost
   const upstream = detail?.dopad?.scenare ?? [];
-  if (upstream.length > 0) {
+  const up = detail?.dopad;
+  if (up && (upstream.length > 0 || (up.pomuze ?? []).length > 0 || (up.pritizi ?? []).length > 0 || up.zbystrit)) {
+    const fromUp = (l?: { [k: string]: string }[]) => (l ?? []).map((x) => ({ kdo: x.kdo, jak: x.jak, zdroj: "rozbor AI na Hlídači" }));
+    const loc = situace(ct);
     return {
-      koho: [],
-      nejhorsi: upstream.map((x) => ({
-        titulek: x.titulek, pribeh: x.kdo ? `${x.kdo}: ${x.pribeh}` : x.pribeh, podminka: "Z rozboru textu na Hlídači zákonů",
-        pojistka: x.pojistka, citace: [x.citace], zdroj: "rozbor AI",
-      })),
+      zbystrit: up.zbystrit || loc?.zbystrit,
+      pomuze: (up.pomuze ?? []).length ? fromUp(up.pomuze) : loc?.pomuze,
+      pritizi: (up.pritizi ?? []).length ? fromUp(up.pritizi) : loc?.pritizi,
+      koho: loc?.koho ?? [],
+      nejhorsi: upstream.length > 0
+        ? upstream.map((x) => ({
+            titulek: x.titulek, pribeh: x.kdo ? `${x.kdo}: ${x.pribeh}` : x.pribeh, podminka: "Z rozboru textu na Hlídači zákonů",
+            pojistka: x.pojistka, citace: [x.citace], zdroj: "rozbor AI",
+          }))
+        : loc?.nejhorsi ?? [],
     };
   }
   const local = situace(ct);
@@ -61,13 +69,16 @@ export function resolved(ct: number, detail?: BillDetail | null): Situation | nu
   if (results.length === 0) return local;
 
   // 2) podmínky pozměňovacích návrhů podle výsledků hlasování
-  const koho = local.koho.flatMap((k) => {
+  const people = (list: Who[] = []) => list.flatMap((k) => {
     const v = verdict(pnNumbers(k.zdroj), results);
     if (v === "dead") return [];
     if (v === "passed") return [{ ...k, zdroj: k.zdroj.replace(/, (jen pokud projd(?:e|ou)|výsledek zatím nelze určit)$/, ", prošlo") }];
     if (v === "partly") return [{ ...k, zdroj: k.zdroj.replace(/, (jen pokud projd(?:e|ou)|výsledek zatím nelze určit)$/, ", prošlo zčásti") }];
     return [k];
   });
+  const koho = people(local.koho);
+  const pomuze = people(local.pomuze);
+  const pritizi = people(local.pritizi);
   const nejhorsi = local.nejhorsi.flatMap((w) => {
     const v = verdict(pnNumbers(w.zdroj), results);
     if (v === "dead") return [];
@@ -75,5 +86,10 @@ export function resolved(ct: number, detail?: BillDetail | null): Situation | nu
     if (v === "partly") return [{ ...w, podminka: `Pozměňovací návrh ${w.zdroj.replace(/^PN /, "")} prošel zčásti` }];
     return [w];
   });
-  return koho.length === 0 && nejhorsi.length === 0 ? null : { ...local, koho, nejhorsi };
+  return { ...local, koho, pomuze, pritizi, nejhorsi };
+}
+
+/** Krátká poznámka k podmíněné položce: „PN č. 2181, jen pokud projde“ (bez jména autora). */
+export function condition(zdroj: string): string | null {
+  return zdroj.startsWith("PN") ? zdroj.replace(/ \([^)]*\)/, "") : null;
 }

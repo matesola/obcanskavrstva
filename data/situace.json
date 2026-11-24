@@ -1,5 +1,5 @@
 {
-  "_info": "Koho se týká a „v nejhorším případě“ u tisků se stupněm Závažné. Sestaveno z rozborů textů a pozměňovacích návrhů na cosepece.cz (AI, ověřeno citacemi). Každá citace je doslovně z detailu tisku na cosepece.cz (kontrola: scripts/check-situace.mjs). „V nejhorším případě“ popisuje, co nejpřísnější čtení textu dovolí, ne co kdo zamýšlí.",
+  "_info": "Koho se týká a „v nejhorším případě“ u tisků se stupněm Závažné. Sestaveno z rozborů textů a pozměňovacích návrhů na cosepece.cz (AI, ověřeno citacemi). Každá citace je doslovně z detailu tisku na cosepece.cz (kontrola: scripts/check-situace.mjs). „V nejhorším případě“ popisuje, co nejpřísnější čtení textu dovolí, ne co kdo zamýšlí. Pole zbystrit, pomuze a pritizi jsou shrnutím rozborů textů a pozměňovacích návrhů na cosepece.cz (bez vlastních citací; ty přinese rozbor Hlídače).",
   "stav_k": "2026-11-24",
   "tisky": {
     "311": {
@@ -37,6 +37,26 @@
             "Sazba daně pro základ mimořádné sektorové daně činí 50 %."
           ],
           "zdroj": "text návrhu"
+        }
+      ],
+      "zbystrit": "Mimořádná daň 50 % pro rafinerie platí i za rok 2026, který už běží.",
+      "pomuze": [
+        {
+          "kdo": "Zemědělci zapsaní jako zemědělští podnikatelé",
+          "jak": "nové odpočty, stabilizační rezerva a zvláštní odpisy",
+          "zdroj": "PN č. 2312, 2314, 2315, 2316, 2317, 2318 (Marian Jurečka), jen pokud projdou"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Zpracovatelé ropy a výrobci paliv",
+          "jak": "daň 50 % z části zisku za roky 2026 a 2027",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Velké skupiny firem",
+          "jak": "nová daň z nadměrných zisků 33 % a 60 % od roku 2028",
+          "zdroj": "PN č. 2329 (Gabriela Svárovská), jen pokud projde"
         }
       ]
     },
@@ -85,6 +105,31 @@
           ],
           "zdroj": "PN č. 2181 (Hana Ančincová)"
         }
+      ],
+      "zbystrit": "Kdo letos vybral část peněz z penzijka, může vracet daňovou podporu. Zpětně.",
+      "pomuze": [
+        {
+          "kdo": "Lidé do 40 let",
+          "jak": "jednorázový státní příspěvek 10 000 nebo 20 000 Kč na spoření",
+          "zdroj": "PN č. 2180 (Hana Ančincová), jen pokud projde"
+        },
+        {
+          "kdo": "Zaměstnanci, kteří si spoří",
+          "jak": "zaměstnavatel přidá stejnou částku, až 2 % příjmu",
+          "zdroj": "PN č. 2181 (Hana Ančincová), jen pokud projde"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Kdo letos vybral částečné odbytné",
+          "jak": "vracení daňové podpory, i za rok 2026",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Zaměstnavatelé",
+          "jak": "dorovnávat příspěvky zaměstnancům, pokuty do 2 000 000 Kč",
+          "zdroj": "PN č. 2181 (Hana Ančincová), jen pokud projde"
+        }
       ]
     },
     "213": {
@@ -121,6 +166,25 @@
             "Žaloba proti rozhodnutí o povinnosti opustit území nebo území členských států Evropské unie"
           ],
           "zdroj": "PN č. 1989 (Hubert Lang)"
+        }
+      ],
+      "zbystrit": "Bezpečnostní novela o uprchlících, do které je vložená reforma správního soudnictví.",
+      "pomuze": [],
+      "pritizi": [
+        {
+          "kdo": "Uprchlíci a žadatelé o azyl",
+          "jak": "přísnější pravidla zajištění, dávek a zdravotního pojištění",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Převaděči",
+          "jak": "vyšší tresty",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Firmy zprostředkující práci",
+          "jak": "nový trestný čin zastřeného zprostředkování, až 10 let",
+          "zdroj": "PN č. 2115 (Aleš Juchelka), jen pokud projde"
         }
       ]
     },
@@ -164,6 +228,36 @@
           ],
           "zdroj": "PN č. 824 (David Pražák)"
         }
+      ],
+      "zbystrit": "Zemědělci nad 200 ha budou každý měsíc hlásit postřiky. Přilepené změny lesního a mysliveckého zákona.",
+      "pomuze": [
+        {
+          "kdo": "Myslivci",
+          "jak": "lov siky, poplatkový lov, nový systém příspěvků",
+          "zdroj": "PN č. 877 (Marek Výborný), výsledek zatím nelze určit"
+        },
+        {
+          "kdo": "Těžaři v malých lomech",
+          "jak": "výjimky při rekultivaci a z odvodů za zemědělskou půdu",
+          "zdroj": "PN č. 876 (Marek Výborný), výsledek zatím nelze určit"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Zemědělci nad 200 ha",
+          "jak": "měsíční elektronické hlášení použitých přípravků",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Profesionální uživatelé a prodejci přípravků",
+          "jak": "nové povinnosti a přestupky",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Myslivci s norníky",
+          "jak": "zákaz lovu pod zemí se psy a chovu lišek",
+          "zdroj": "PN č. 872 (Jana Patková), výsledek zatím nelze určit"
+        }
       ]
     },
     "222": {
@@ -190,6 +284,15 @@
             "na základě odůvodněné žádosti povolit uvést krizově relevantní zboží na trh nebo do provozu na území České republiky bez posouzení shody"
           ],
           "zdroj": "text návrhu"
+        }
+      ],
+      "zbystrit": "Při krizi smí stát pustit na trh zboží bez obvyklé certifikace.",
+      "pomuze": [],
+      "pritizi": [
+        {
+          "kdo": "Firmy ve veřejných zakázkách",
+          "jak": "kauce, kratší lhůta na žalobu, bez rozkladu",
+          "zdroj": "PN č. 2003 (Ivan Bartoš), jen pokud projde"
         }
       ]
     },
@@ -238,6 +341,36 @@
           ],
           "zdroj": "text návrhu"
         }
+      ],
+      "zbystrit": "Zatoulané zvíře může připadnout obci a policie smí i do obydlí.",
+      "pomuze": [
+        {
+          "kdo": "Toulavé kočky a jejich ochránci",
+          "jak": "obce zajistí kastraci a označení",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Spolky na ochranu zvířat",
+          "jak": "nahlížení do záznamů z kamer na jatkách, uchování 3 roky",
+          "zdroj": "PN č. 2069 (Jiří Pospíšil), jen pokud projde"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Majitelé koček",
+          "jak": "povinné čipování, registrace a poplatek jako ze psů",
+          "zdroj": "PN č. 2063 (Jana Patková), jen pokud projde"
+        },
+        {
+          "kdo": "Majitelé zatoulaných zvířat",
+          "jak": "zvíře může připadnout obci",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Obce",
+          "jak": "kastrace a označení koček na vlastní náklady",
+          "zdroj": "text návrhu"
+        }
       ]
     },
     "115": {
@@ -279,6 +412,31 @@
             "Exekuční příkaz k pozastavení zbrojního oprávnění povinného může exekutor vydat za podmínek uvedených v § 71a odst. 1."
           ],
           "zdroj": "PN č. 1581 (Václav Pláteník)"
+        }
+      ],
+      "zbystrit": "Exekutor může vzít zbrojní průkaz dlužníkům výživného; přísněji za práci cizinců bez povolení.",
+      "pomuze": [
+        {
+          "kdo": "Lidé stíhaní za neplacení výživného",
+          "jak": "nepodmíněné vězení jen výjimečně",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Rodiče, kterým druhý neplatí výživné",
+          "jak": "exekutor může pozastavit dlužníkovi zbrojní průkaz",
+          "zdroj": "PN č. 1581 (Václav Pláteník), jen pokud projde"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Dlužníci výživného se zbrojním průkazem",
+          "jak": "pozastavení oprávnění, odevzdat zbraně do 5 dnů",
+          "zdroj": "PN č. 1581 (Václav Pláteník), jen pokud projde"
+        },
+        {
+          "kdo": "Podnikatelé s pracovníky ze zahraničí",
+          "jak": "trestné i umožnit práci bez povolení, až 3 roky",
+          "zdroj": "PN č. 1422 (Aleš Juchelka), jen pokud projde"
         }
       ]
     },
@@ -332,7 +490,588 @@
           ],
           "zdroj": "PN č. 2384 (Marek Novák)"
         }
+      ],
+      "zbystrit": "Pravidla pro práci přes aplikace a průhledné platy. Přilepené změny pojistného a vymáhání dluhů státu.",
+      "pomuze": [
+        {
+          "kdo": "Kurýři a řidiči přes aplikace",
+          "jak": "nová pravidla platformové práce",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Zaměstnanci",
+          "jak": "průhlednost odměňování",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Dlužníci státu",
+          "jak": "předběžné posečkání, prominutí až 50 % úroku",
+          "zdroj": "PN č. 2367 (Marian Jurečka), jen pokud projde"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Dlužníci pojistného",
+          "jak": "nové lhůty platí i pro ty, které už běží",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Agentury práce",
+          "jak": "kauce 3 000 000 Kč, jinak konec povolení",
+          "zdroj": "PN č. 2384 (Marek Novák), jen pokud projde"
+        }
       ]
+    },
+    "270": {
+      "faze": "3. čtení",
+      "zbystrit": "Důchodci nad 80 let a pracující důchodci dostanou víc.",
+      "pomuze": [
+        {
+          "kdo": "Důchodci od 80 let",
+          "jak": "důchod vyšší o 500 nebo 1 000 Kč podle věku",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Pracující důchodci",
+          "jak": "zvýšení důchodu podle výdělků",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Pracující lidé v předčasném důchodu",
+          "jak": "částečná výplata důchodu",
+          "zdroj": "PN č. 1979 (Marian Jurečka), jen pokud projde"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Absolventi dálkového a kombinovaného studia",
+          "jak": "studium jinou než prezenční formou se nezapočte do důchodu",
+          "zdroj": "PN č. 2230 (Robert Plaga), jen pokud projde"
+        },
+        {
+          "kdo": "Důchodci od 80 let",
+          "jak": "zvýšení podle věku by se vypustilo",
+          "zdroj": "PN č. 1982 (Marian Jurečka), jen pokud projde"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "235": {
+      "faze": "V Senátu",
+      "zbystrit": "Stát zvedá základ, ze kterého platí zdravotní pojištění za děti, důchodce a další, z 14 074 na 18 362 Kč.",
+      "pomuze": [
+        {
+          "kdo": "Zdravotní pojišťovny a zdravotnictví",
+          "jak": "víc peněz za státní pojištěnce od roku 2027",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Pacientské organizace",
+          "jak": "pojišťovny jim smějí přispívat bez stropu 5 %",
+          "zdroj": "PN č. 1813 (Michaela Šebelová), výsledek zatím nelze určit"
+        }
+      ],
+      "pritizi": [],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "69": {
+      "faze": "V Senátu",
+      "zbystrit": "Nová pravidla pro online platformy a reklamu na internetu, s dozorem a pokutami.",
+      "pomuze": [
+        {
+          "kdo": "Uživatelé online služeb",
+          "jak": "dozor nad digitálními službami a obchodními sděleními",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Provozovatelé digitálních služeb",
+          "jak": "nové povinnosti, pokuty až 6 % celosvětového obratu",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "62": {
+      "faze": "V Senátu",
+      "zbystrit": "Výrobci budou muset vybrané výrobky opravovat a prodávat náhradní díly.",
+      "pomuze": [
+        {
+          "kdo": "Spotřebitelé",
+          "jak": "právo na opravu, dostupné díly a informace",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Výrobci",
+          "jak": "povinnost opravovat, pokuty do 5 000 000 Kč",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "58": {
+      "faze": "V Senátu",
+      "zbystrit": "Nová pravidla pro baterie. Jedné skupině firem zpětně prodlužuje lhůtu.",
+      "pomuze": [
+        {
+          "kdo": "Kolektivní systémy, které nevytvořily rezervu",
+          "jak": "zpětně delší lhůta",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Výrobci textilu a obuvi",
+          "jak": "povinnosti zpětného odběru a kolektivní systémy",
+          "zdroj": "PN č. 1809 (Petr Hladík), jen pokud projde"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "53": {
+      "faze": "V Senátu",
+      "zbystrit": "Konec klamavé „zelené“ reklamy a delší odpovědnost za vady po opravě.",
+      "pomuze": [
+        {
+          "kdo": "Spotřebitelé",
+          "jak": "zákaz klamavých ekologických tvrzení, delší odpovědnost za vady po opravě",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Prodejci",
+          "jak": "víc informací pro zákazníky",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "52": {
+      "faze": "V Senátu",
+      "zbystrit": "Online služby musí mít v Česku zástupce, přes kterého jim policie doručí příkaz k vydání dat.",
+      "pomuze": [],
+      "pritizi": [
+        {
+          "kdo": "Poskytovatelé online služeb",
+          "jak": "zástupce v ČR, pokuta do 10 000 000 Kč",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "14": {
+      "faze": "V Senátu",
+      "zbystrit": "Přísnější pravidla pro chladiva a omezení anestetika desfluranu v nemocnicích.",
+      "pomuze": [
+        {
+          "kdo": "Certifikovaní technici",
+          "jak": "dřívější školení se uzná",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Nemocnice",
+          "jak": "omezení použití desfluranu",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Firmy pracující s chladivy",
+          "jak": "evidence, označování, sankce",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "231": {
+      "faze": "2. čtení",
+      "zbystrit": "Konec poplatků za televizi a rozhlas. Od roku 2027 je platí stát z rozpočtu.",
+      "pomuze": [
+        {
+          "kdo": "Domácnosti a firmy",
+          "jak": "přestanou platit televizní a rozhlasové poplatky",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "324": {
+      "faze": "2. čtení",
+      "zbystrit": "Rozpočet na rok 2027 se schodkem 386 miliard Kč.",
+      "pomuze": [],
+      "pritizi": [],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "210": {
+      "faze": "3. čtení",
+      "zbystrit": "Velké firmy na burze si musí dát cíl zastoupení žen a mužů ve vedení.",
+      "pomuze": [
+        {
+          "kdo": "Méně zastoupené pohlaví",
+          "jak": "přednost při výběru do vedení velkých kotovaných firem",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Velké kotované firmy",
+          "jak": "cíle zastoupení a pravidla výběru",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "173": {
+      "faze": "3. čtení",
+      "zbystrit": "Vyšší tresty za týrání zvířat, nově i za usmrcení psa nebo kočky ze zavrženíhodné pohnutky.",
+      "pomuze": [],
+      "pritizi": [
+        {
+          "kdo": "Pachatelé týrání zvířat",
+          "jak": "vyšší trestní sazby",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "46": {
+      "faze": "3. čtení",
+      "zbystrit": "Úřady z jiných států EU si snáz vyžádají data od online služeb.",
+      "pomuze": [],
+      "pritizi": [
+        {
+          "kdo": "Poskytovatelé online služeb",
+          "jak": "příkazy k vydání dat, pořádkové pokuty",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "228": {
+      "faze": "2. čtení",
+      "zbystrit": "Stát založí registry všech žáků, studentů a učitelů, se zápisem zpětně od roku 2018.",
+      "pomuze": [],
+      "pritizi": [
+        {
+          "kdo": "Školy a vysoké školy",
+          "jak": "zapsat i údaje o lidech, kteří skončili od roku 2018",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "301": {
+      "faze": "2. čtení",
+      "zbystrit": "Kdo pracuje přes aplikaci, bude se považovat za zaměstnance, dokud platforma neprokáže opak.",
+      "pomuze": [
+        {
+          "kdo": "Kurýři a řidiči přes aplikace",
+          "jak": "domněnka pracovního vztahu, pravidla pro algoritmy",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Platformy",
+          "jak": "evidence, informace pro pracovníky, přestupky",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "286": {
+      "faze": "2. čtení",
+      "zbystrit": "Lepší ochrana obchodního tajemství, i během soudního sporu.",
+      "pomuze": [
+        {
+          "kdo": "Firmy",
+          "jak": "ochrana obchodního tajemství u soudu",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "260": {
+      "faze": "2. čtení",
+      "zbystrit": "Evidence skutečných majitelů firem přestane být veřejná. Jen pro ty, kdo prokážou oprávněný zájem.",
+      "pomuze": [
+        {
+          "kdo": "Majitelé firem",
+          "jak": "méně údajů veřejně dostupných",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Novináři a veřejnost",
+          "jak": "přístup jen po prokázání oprávněného zájmu",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "207": {
+      "faze": "2. čtení",
+      "zbystrit": "Nové trestné činy proti životnímu prostředí, včetně nakládání se rtutí.",
+      "pomuze": [],
+      "pritizi": [
+        {
+          "kdo": "Firmy, které znečišťují prostředí",
+          "jak": "nové trestné činy",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "162": {
+      "faze": "2. čtení",
+      "zbystrit": "Obrana proti šikanózním žalobám na svobodu projevu. Záloha na překlad i v rozjetých sporech.",
+      "pomuze": [
+        {
+          "kdo": "Novináři a aktivisté",
+          "jak": "ochrana před žalobami proti svobodě projevu",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Lidé ve sporech s cizinou",
+          "jak": "záloha na překlad, i v běžících řízeních; nezaplacení = konec řízení",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Kdo žaluje stát o náhradu škody",
+          "jak": "poplatek za odvolání",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "143": {
+      "faze": "3. čtení",
+      "zbystrit": "Povinné varování u dluhopisů, i u těch už vydaných.",
+      "pomuze": [
+        {
+          "kdo": "Drobní investoři",
+          "jak": "varování u nabízených dluhopisů",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Firmy vydávající dluhopisy",
+          "jak": "varování i u starých emisí, pokuta do 2 000 000 Kč",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "279": {
+      "faze": "2. čtení",
+      "zbystrit": "Zprávy o udržitelnosti: jedna státní banka jmenovitě vyňata, prahy zpětně od roku 2025.",
+      "pomuze": [
+        {
+          "kdo": "Jmenovitě uvedená státní banka",
+          "jak": "výjimka z povinnosti zprávy o udržitelnosti",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Firmy ze zemí mimo EU",
+          "jak": "zprávy o udržitelnosti a sankce",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "216": {
+      "faze": "2. čtení",
+      "zbystrit": "Podat někomu drogu bez jeho vědomí bude trestné až na 10 let.",
+      "pomuze": [
+        {
+          "kdo": "Oběti",
+          "jak": "nový trestný čin neoprávněného podání návykové látky",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "35": {
+      "faze": "2. čtení",
+      "zbystrit": "Platová základna poslanců, senátorů a ministrů do konce roku 2030 pevně 101 364 Kč.",
+      "pomuze": [],
+      "pritizi": [],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "218": {
+      "faze": "2. čtení",
+      "zbystrit": "Nová pravidla DPH pro e-shopy a online tržiště.",
+      "pomuze": [],
+      "pritizi": [
+        {
+          "kdo": "Online tržiště a platformy",
+          "jak": "povinnosti k DPH za prodejce",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "114": {
+      "faze": "2. čtení",
+      "zbystrit": "Uhlíkové clo na dovoz: jistoty, certifikáty a pokuty.",
+      "pomuze": [],
+      "pritizi": [
+        {
+          "kdo": "Dovozci oceli, hliníku, cementu a hnojiv",
+          "jak": "certifikáty, jistoty, pokuty",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "98": {
+      "faze": "2. čtení",
+      "zbystrit": "Kryptoburzy budou hlásit transakce a účty klientů finanční správě, i za rok 2026.",
+      "pomuze": [],
+      "pritizi": [
+        {
+          "kdo": "Držitelé kryptoměn",
+          "jak": "údaje o jejich transakcích půjdou správcům daně",
+          "zdroj": "text návrhu"
+        },
+        {
+          "kdo": "Provozovatelé kryptoaktiv",
+          "jak": "registrace a oznamování, i za rok 2026",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "193": {
+      "faze": "2. čtení",
+      "zbystrit": "Autorizovaná obalová společnost nesmí rozdělovat zisk a jeden akcionář smí mít nejvýš 3 %.",
+      "pomuze": [],
+      "pritizi": [
+        {
+          "kdo": "Akcionáři autorizované obalové společnosti",
+          "jak": "omezení podílu, zákaz rozdělování zisku",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "192": {
+      "faze": "2. čtení",
+      "zbystrit": "Národní knihovna bude archivovat volně dostupný web.",
+      "pomuze": [
+        {
+          "kdo": "Veřejnost a badatelé",
+          "jak": "přístup k archivu webu a elektronických periodik",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "pritizi": [
+        {
+          "kdo": "Vydavatelé",
+          "jak": "povinné výtisky i elektronických periodik",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "153": {
+      "faze": "2. čtení",
+      "zbystrit": "Přísnější pravidla pro reklamu na léky a zdravotnické prostředky.",
+      "pomuze": [],
+      "pritizi": [
+        {
+          "kdo": "Výrobci a prodejci léků a zdravotnických prostředků",
+          "jak": "nové přestupky",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "47": {
+      "faze": "3. čtení",
+      "zbystrit": "NKÚ smí kontrolovat hospodaření České televize a Českého rozhlasu.",
+      "pomuze": [],
+      "pritizi": [
+        {
+          "kdo": "Česká televize a Český rozhlas",
+          "jak": "kontrola Nejvyšším kontrolním úřadem",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "116": {
+      "faze": "2. čtení",
+      "zbystrit": "Ruší se zákon o výběru lidí do vedení státních firem.",
+      "pomuze": [],
+      "pritizi": [],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "64": {
+      "faze": "2. čtení",
+      "zbystrit": "Převod státního majetku bez povinného ocenění podle zákona o oceňování.",
+      "pomuze": [],
+      "pritizi": [],
+      "koho": [],
+      "nejhorsi": []
+    },
+    "63": {
+      "faze": "2. čtení",
+      "zbystrit": "Nový zákon o účetnictví pro firmy, obce i stát.",
+      "pomuze": [],
+      "pritizi": [
+        {
+          "kdo": "Firmy a úřady",
+          "jak": "nové kategorie a pravidla účetnictví",
+          "zdroj": "text návrhu"
+        }
+      ],
+      "koho": [],
+      "nejhorsi": []
     }
   }
 }

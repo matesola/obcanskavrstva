@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { bill, bills, upcoming, type Bill } from "@/lib/api";
-import { covered, resolved, type Situation } from "@/lib/situace";
+import { covered, resolved, situace, type Situation } from "@/lib/situace";
 import { date, humanName, stepIndex, title } from "@/lib/text";
 import BillCard from "@/components/BillCard";
 import GroupFilter from "@/components/GroupFilter";
@@ -26,6 +26,7 @@ function CompactList({ items, label }: { items: Bill[]; label: string }) {
           <li key={b.ct} data-groups={(b.rozbor?.skupiny ?? []).join(" ")}>
             <Link href={`/tisk/${b.ct}`}>
               <strong>{title(b)}</strong>
+              {situace(b.ct)?.zbystrit && <em className="list-alert">{situace(b.ct)?.zbystrit}</em>}
               <span>Tisk {b.ct} · {b.faze}{b.uroven === "major" ? " · závažný postup" : ""}</span>
             </Link>
           </li>

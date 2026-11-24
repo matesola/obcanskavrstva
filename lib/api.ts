@@ -24,6 +24,9 @@ export type Impact = {
   sankce: ImpactItem[];
   rizika: ImpactItem[];
   scenare?: ImpactItem[]; // v nejhorším případě: titulek, kdo, pribeh, pojistka, citace
+  pomuze?: ImpactItem[]; // kdo, jak, citace
+  pritizi?: ImpactItem[];
+  zbystrit?: string;
 };
 
 export type Bill = {
