@@ -2,13 +2,12 @@ import Link from "next/link";
 import type { Bill } from "@/lib/api";
 import { GROUPS, LEVEL, date, kind, perex, subtitle, title } from "@/lib/text";
 import Path from "./Path";
-import { situace } from "@/lib/situace";
+import type { Situation } from "@/lib/situace";
 
-export default function BillCard({ b }: { b: Bill }) {
+export default function BillCard({ b, sit }: { b: Bill; sit?: Situation | null }) {
   const groups = b.rozbor?.skupiny ?? [];
   const p = perex(b);
   const sub = subtitle(b);
-  const sit = situace(b.ct);
   const worst = b.uroven === "major" ? sit?.nejhorsi[0] : undefined;
   return (
     <Link href={`/tisk/${b.ct}`} className="card" data-groups={groups.join(" ")}>

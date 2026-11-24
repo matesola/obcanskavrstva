@@ -1,0 +1,51 @@
+# Denní kontrola, že Občanská vrstva sedí s Hlídačem zákonů (cosepece.cz).
+# Neúspěšný běh = GitHub pošle e-mail. Spustit jde i ručně (Actions → Synchro s Hlídačem → Run workflow).
+name: Synchro s Hlídačem
+
+on:
+  schedule:
+    - cron: "17 5 * * *" # 6:17 v zimě, 7:17 v létě (pražský čas)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  podklady:
+    name: Podklady Koho a V nejhorším případě
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/check-situace.mjs | tee vysledek.txt
+      - if: always()
+        run: |
+          echo '## Podklady vs. Hlídač zákonů' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          cat vysledek.txt >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+  pr:
+    name: Větev dopad-na-obcany proti aktuálnímu Hlídači
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dopad-na-obcany
+          fetch-depth: 0
+      - name: Přestavět na aktuální main Hlídače (jen zkouška, nic se nepushuje)
+        run: |
+          git config user.name ci && git config user.email ci@localhost
+          git remote add hlidac https://github.com/FrantisekJanos/cosepece.git
+          git fetch hlidac main
+          BASE=$(git merge-base HEAD hlidac/main)
+          echo "Za Hlídačem: $(git rev-list --count HEAD..hlidac/main) commitů" >> "$GITHUB_STEP_SUMMARY"
+          git rebase --onto hlidac/main "$BASE" || { echo "Konflikt při přestavění, větev je potřeba ručně srovnat." >> "$GITHUB_STEP_SUMMARY"; exit 1; }
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: pdo_sqlite, zip, curl, iconv, mbstring
+      - name: Testy Hlídače nad přestavěnou větví
+        run: php tests/run.php | tail -3

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { bill, type ImpactItem } from "@/lib/api";
 import { GROUPS, LEVEL, date, kind, perex, subtitle, title } from "@/lib/text";
 import Path from "@/components/Path";
-import { situace } from "@/lib/situace";
+import { resolved } from "@/lib/situace";
 
 export const revalidate = 900; // musí být literál (Next.js), shodně s REVALIDATE v lib/api.ts
 
@@ -63,17 +63,7 @@ export default async function BillPage({ params }: Props) {
   const sub = subtitle(b);
   const p = perex(b);
   const summary = b.rozbor?.shrnuti;
-  // ruční podklady (data/situace.json) mají přednost, jinak „v nejhorším případě“ z rozboru Hlídače (dopad.scenare)
-  const local = situace(b.ct);
-  const sit = local ?? (d && (d.scenare ?? []).length > 0
-    ? {
-        koho: [],
-        nejhorsi: (d.scenare ?? []).map((x) => ({
-          titulek: x.titulek, pribeh: `${x.kdo}: ${x.pribeh}`, podminka: "Z rozboru textu na Hlídači zákonů",
-          pojistka: x.pojistka, citace: [x.citace], zdroj: "rozbor AI",
-        })),
-      }
-    : null);
+  const sit = resolved(b.ct, b);
   const votes = [...(b.hlasovani ?? [])].sort((x, y) => y.datum.localeCompare(x.datum)).slice(0, 5);
 
   return (

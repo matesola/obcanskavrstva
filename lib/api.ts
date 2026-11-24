@@ -55,7 +55,13 @@ export type Vote = {
   psp_url: string;
 };
 
+export type PnResult = {
+  cislo: number;
+  stav: "prijat" | "castecne" | "zamitnut" | "nehlasovatelny" | "nezaznel" | "ceka" | "neurceno" | string;
+};
+
 export type BillDetail = Bill & {
+  vysledky_pn?: PnResult[];
   hlasovani: Vote[];
   senat: { popis: string[] } | null;
   hlavni_nalez?: { titulek: string; perex: string; citace: string; zdroj: string; overeno: boolean } | null;

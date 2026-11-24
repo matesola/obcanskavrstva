@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { bills, upcoming, type Bill } from "@/lib/api";
+import { bill, bills, upcoming, type Bill } from "@/lib/api";
+import { covered, resolved, type Situation } from "@/lib/situace";
 import { date, humanName, stepIndex, title } from "@/lib/text";
 import BillCard from "@/components/BillCard";
 import GroupFilter from "@/components/GroupFilter";
@@ -37,6 +38,12 @@ function CompactList({ items, label }: { items: Bill[]; label: string }) {
 export default async function Home() {
   const [data, prep] = await Promise.all([bills(), upcoming()]);
   const all = data?.tisky ?? [];
+  // u tisků s podklady načteme detail kvůli výsledkům PN a dopadu z Hlídače (pár požadavků, cache 15 min)
+  const want = new Set([...covered(), ...all.filter((b) => b.uroven === "major").map((b) => b.ct)]);
+  const sits = new Map<number, Situation | null>(
+    await Promise.all([...want].map(async (ct) => [ct, resolved(ct, await bill(ct))] as const)),
+  );
+  const card = (b: Bill) => <BillCard key={b.ct} b={b} sit={sits.get(b.ct) ?? null} />;
 
   // ve hře: 2. a 3. čtení, tam se rozhoduje o podobě zákona
   const live = all.filter((b) => [2, 3].includes(stepIndex(b.faze))).sort(byScoreThenRecent);
@@ -69,7 +76,7 @@ export default async function Home() {
       <section className="section">
         <h2>Právě ve hře</h2>
         <p className="lead">Druhé a třetí čtení: teď se rozhoduje, jak zákon nakonec bude vypadat.</p>
-        {live.slice(0, 8).map((b) => <BillCard key={b.ct} b={b} />)}
+        {live.slice(0, 8).map(card)}
         {live.length === 0 && <p className="empty">Teď nic.</p>}
         {live.length > 8 && <CompactList items={live.slice(8)} label={`Dalších ${live.length - 8} ve hře`} />}
       </section>
@@ -78,7 +85,7 @@ export default async function Home() {
         <section className="section">
           <h2>Prošlo Sněmovnou</h2>
           <p className="lead">Míří do Senátu nebo k prezidentovi. Brzy může platit.</p>
-          {passed.map((b) => <BillCard key={b.ct} b={b} />)}
+          {passed.map(card)}
         </section>
       )}
 
@@ -86,7 +93,7 @@ export default async function Home() {
         <section className="section">
           <h2>Ve frontě</h2>
           <p className="lead">Návrhy před prvním čtením nebo v něm. Nahoře ty, u kterých Hlídač zákonů vidí sporný postup.</p>
-          {queue.slice(0, 4).map((b) => <BillCard key={b.ct} b={b} />)}
+          {queue.slice(0, 4).map(card)}
           {queue.length > 4 && <CompactList items={queue.slice(4)} label={`Dalších ${queue.length - 4} návrhů`} />}
         </section>
       )}
