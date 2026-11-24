@@ -19,7 +19,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Link href="/" className="brand">
             Občanská <mark>vrstva</mark>
           </Link>
-          <a className="credit" href="https://cosepece.cz/">nad daty Hlídače zákonů</a>
+          <nav className="topnav" aria-label="Hlavní">
+            <Link href="/hledat">Hledat</Link>
+            <a className="credit" href="https://cosepece.cz/">nad daty Hlídače zákonů</a>
+          </nav>
         </header>
         <main>{children}</main>
         <footer className="foot">

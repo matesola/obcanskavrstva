@@ -1,119 +1,95 @@
 import Link from "next/link";
-import { bill, bills, upcoming, type Bill } from "@/lib/api";
-import { covered, resolved, situace, type Situation } from "@/lib/situace";
-import { date, humanName, stepIndex, title } from "@/lib/text";
-import BillCard from "@/components/BillCard";
-import GroupFilter from "@/components/GroupFilter";
+import { upcoming } from "@/lib/api";
+import { byCivic, loadAll } from "@/lib/load";
+import type { BillView } from "@/lib/model";
+import type { RoleKey } from "@/lib/roles";
+import { date, humanName } from "@/lib/text";
+import BillCard, { BillRow } from "@/components/BillCard";
+import Radar from "@/components/Radar";
+import SinceLast from "@/components/SinceLast";
+import data from "@/data/situace.json";
 
 export const revalidate = 900; // musí být literál (Next.js), shodně s REVALIDATE v lib/api.ts
 
-const byScoreThenRecent = (a: Bill, b: Bill) =>
-  b.skore - a.skore || String(b.posledni_zmena).localeCompare(String(a.posledni_zmena));
-const byRecent = (a: Bill, b: Bill) => String(b.posledni_zmena).localeCompare(String(a.posledni_zmena));
-
-/** První věta popisu materiálu vlády. */
 function firstSentence(s: string): string {
   const m = s.match(/^(.{40,260}?[.!?])\s+(?=[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ])/);
   return (m ? m[1] : s.slice(0, 220)).trim();
 }
 
-function CompactList({ items, label }: { items: Bill[]; label: string }) {
+function Section({ id, title, lead, cards, rows, rowsLabel }: {
+  id: string; title: string; lead: string; cards: BillView[]; rows?: BillView[]; rowsLabel?: string;
+}) {
   return (
-    <details className="more">
-      <summary>{label}</summary>
-      <ul className="list">
-        {items.map((b) => (
-          <li key={b.ct} data-groups={(b.rozbor?.skupiny ?? []).join(" ")}>
-            <Link href={`/tisk/${b.ct}`}>
-              <strong>{title(b)}</strong>
-              {situace(b.ct)?.zbystrit && <em className="list-alert">{situace(b.ct)?.zbystrit}</em>}
-              <span>Tisk {b.ct} · {b.faze}{b.uroven === "major" ? " · závažný postup" : ""}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </details>
+    <section className="section" data-section={id} aria-labelledby={`h-${id}`}>
+      <h2 id={`h-${id}`}>{title}</h2>
+      <p className="lead">{lead}</p>
+      {cards.map((v) => <BillCard key={v.ct} v={v} />)}
+      {rows && rows.length > 0 && (
+        <details className="more">
+          <summary>{rowsLabel ?? `Další (${rows.length})`}</summary>
+          <ul className="list">{rows.map((v) => <BillRow key={v.ct} v={v} />)}</ul>
+        </details>
+      )}
+      <p className="empty empty-sel" hidden>Ve vybraných rolích tu teď nic není.</p>
+    </section>
   );
 }
 
 export default async function Home() {
-  const [data, prep] = await Promise.all([bills(), upcoming()]);
-  const all = data?.tisky ?? [];
-  // u tisků s podklady načteme detail kvůli výsledkům PN a dopadu z Hlídače (pár požadavků, cache 15 min)
-  const want = new Set([...covered(), ...all.filter((b) => b.uroven === "major").map((b) => b.ct)]);
-  const sits = new Map<number, Situation | null>(
-    await Promise.all([...want].map(async (ct) => [ct, resolved(ct, await bill(ct))] as const)),
-  );
-  const card = (b: Bill) => <BillCard key={b.ct} b={b} sit={sits.get(b.ct) ?? null} />;
+  const [{ views, aktualizovano }, prep] = await Promise.all([loadAll(), upcoming()]);
+  const at = (steps: number[]) => views.filter((v) => steps.includes(v.step)).sort(byCivic);
 
-  // ve hře: 2. a 3. čtení, tam se rozhoduje o podobě zákona
-  const live = all.filter((b) => [2, 3].includes(stepIndex(b.faze))).sort(byScoreThenRecent);
-  // prošlo Sněmovnou, míří do Senátu nebo k prezidentovi
-  const passed = all.filter((b) => [4, 5].includes(stepIndex(b.faze))).sort(byRecent);
-  // čeká na 1. čtení nebo je v něm
-  const queue = all.filter((b) => [0, 1].includes(stepIndex(b.faze))).sort(byScoreThenRecent);
-  const valid = all.filter((b) => stepIndex(b.faze) === 6).sort(byRecent);
-  const govt = prep.filter((p) => p.faze !== "schvaleno").sort((a, b) => b.zmeneno.localeCompare(a.zmeneno)).slice(0, 6);
+  const live = at([2, 3]);
+  const passed = at([4, 5]);
+  const queue = at([0, 1]);
+  const valid = views.filter((v) => v.step === 6).sort((a, b) => String(b.posledni).localeCompare(String(a.posledni)));
+  const govt = prep.filter((p) => p.faze !== "schvaleno").sort((a, b) => b.zmeneno.localeCompare(a.zmeneno)).slice(0, 5);
 
-  const available = [...new Set(all.flatMap((b) => b.rozbor?.skupiny ?? []))];
+  const inPlay = views.filter((v) => v.step >= 0 && v.step <= 5);
+  const counts: Partial<Record<RoleKey, number>> = {};
+  for (const v of inPlay) for (const r of v.roles) counts[r.key] = (counts[r.key] ?? 0) + 1;
+  const explained = inPlay.filter((v) => v.coverage === "plne").length;
 
   return (
     <>
       <section className="hero">
-        <h1>
-          Co se na vás <mark>chystá</mark>
-        </h1>
+        <h1>Co se na vás <mark>chystá</mark></h1>
         <p className="tag">„To se nasmějete, lidové vrstvy.“</p>
         <p className="dry">
-          Zákony, které právě projednává Sněmovna, přeložené do lidské řeči. Koho se týkají, odkdy a kde je háček.
-          Každé tvrzení s citací ze zákona.
+          Co Sněmovna chystá, lidskou řečí: koho se to týká, komu to pomůže, komu přitíží a jestli už musíte něco dělat.
+          Z dat <a href="https://cosepece.cz/">Hlídače zákonů</a>.
         </p>
+        <form action="/hledat" className="search" role="search">
+          <label htmlFor="q" className="sr">Hledat téma</label>
+          <input id="q" name="q" type="search" placeholder="Hledat: důchod, nájem, poplatky za televizi, psi…" />
+          <button type="submit">Hledat</button>
+        </form>
       </section>
 
-      {!data && <p className="empty">Data z Hlídače zákonů se teď nepodařilo načíst. Zkuste to za chvíli.</p>}
+      <SinceLast items={views.map((v) => ({ ct: v.ct, faze: v.faze, title: v.title }))} />
+      <Radar counts={counts} />
 
-      <GroupFilter available={available} />
-
-      <section className="section">
-        <h2>Právě ve hře</h2>
-        <p className="lead">Druhé a třetí čtení: teď se rozhoduje, jak zákon nakonec bude vypadat.</p>
-        {live.slice(0, 8).map(card)}
-        {live.length === 0 && <p className="empty">Teď nic.</p>}
-        {live.length > 8 && <CompactList items={live.slice(8)} label={`Dalších ${live.length - 8} ve hře`} />}
-      </section>
+      <Section id="ted" title="Rozhoduje se teď" lead="Druhé a třetí čtení ve Sněmovně. Teď se rozhoduje, jak zákon bude vypadat. Nic z toho zatím neplatí."
+        cards={live.slice(0, 8)} rows={live.slice(8)} rowsLabel={`Další návrhy ve hře (${Math.max(0, live.length - 8)})`} />
 
       {passed.length > 0 && (
-        <section className="section">
-          <h2>Prošlo Sněmovnou</h2>
-          <p className="lead">Míří do Senátu nebo k prezidentovi. Brzy může platit.</p>
-          {passed.map(card)}
-        </section>
+        <Section id="schvaleno" title="Schválila Sněmovna, ještě neplatí" lead="Rozhoduje Senát nebo prezident. Platit začne až po vyhlášení ve Sbírce zákonů a od data účinnosti." cards={passed} />
       )}
 
-      {queue.length > 0 && (
-        <section className="section">
-          <h2>Ve frontě</h2>
-          <p className="lead">Návrhy před prvním čtením nebo v něm. Nahoře ty, u kterých Hlídač zákonů vidí sporný postup.</p>
-          {queue.slice(0, 4).map(card)}
-          {queue.length > 4 && <CompactList items={queue.slice(4)} label={`Dalších ${queue.length - 4} návrhů`} />}
-        </section>
-      )}
+      <Section id="fronta" title="Čeká na projednání" lead="Návrhy před prvním čtením nebo v něm. Mnoho z nich se nikdy neprojedná."
+        cards={queue.slice(0, 3)} rows={queue.slice(3)} rowsLabel={`Všechny čekající návrhy (${Math.max(0, queue.length - 3)})`} />
 
       {govt.length > 0 && (
-        <section className="section">
-          <h2>Chystá vláda</h2>
-          <p className="lead">Ještě ani není ve Sněmovně. Teď se k tomu dá nejsnáz něco říct.</p>
+        <section className="section" aria-labelledby="h-vlada">
+          <h2 id="h-vlada">Chystá vláda</h2>
+          <p className="lead">Ještě to není ve Sněmovně. Detaily a připomínky k nim jsou na Hlídači zákonů.</p>
           <ul className="list">
             {govt.map((p) => (
               <li key={p.pid}>
                 <a href={`https://cosepece.cz/pripravovane.php#prep-${p.pid}`}>
                   <strong>{humanName(p.nazev, p.nazev)}</strong>
-                  <span>
-                    {p.resort}
-                    {p.pripominky ? ` · připomínky ${p.pripominky.dni} dní` : ""}
-                    {p.mimo_plan ? " · mimo plán vlády" : ""}
-                  </span>
-                  {p.popis && <span style={{ display: "block", marginTop: 4 }}>{firstSentence(p.popis)}</span>}
+                  <span>{p.resort}{p.pripominky ? ` · připomínky ${p.pripominky.dni} dní` : ""}{p.mimo_plan ? " · mimo plán vlády" : ""}</span>
+                  {p.popis && <span className="list-note">{firstSentence(p.popis)}</span>}
                 </a>
               </li>
             ))}
@@ -122,22 +98,30 @@ export default async function Home() {
       )}
 
       {valid.length > 0 && (
-        <section className="section">
-          <h2>Už platí</h2>
-          <ul className="list">
-            {valid.slice(0, 8).map((b) => (
-              <li key={b.ct} data-groups={(b.rozbor?.skupiny ?? []).join(" ")}>
-                <Link href={`/tisk/${b.ct}`}>
-                  <strong>{title(b)}</strong>
-                  <span>Tisk {b.ct} · vyhlášeno {date(b.posledni_zmena)}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+        <section className="section" data-section="vyhlaseno" aria-labelledby="h-vyhlaseno">
+          <h2 id="h-vyhlaseno">Nedávno vyhlášeno</h2>
+          <p className="lead">Prošlo celým procesem a vyšlo ve Sbírce zákonů. Pozor: vyhlášení neznamená, že se podle zákona už postupuje. Rozhoduje datum účinnosti.</p>
+          <ul className="list">{valid.slice(0, 8).map((v) => <BillRow key={v.ct} v={v} />)}</ul>
+          <p className="empty empty-sel" hidden>Ve vybraných rolích tu teď nic není.</p>
         </section>
       )}
 
-      {data && <p className="small" style={{ marginTop: 32 }}>Data aktualizována {date(data.aktualizovano)}, {data.aktualizovano.slice(11, 16)}.</p>}
+      <section className="about" aria-label="O datech">
+        <h2>Odkud to víme</h2>
+        <p>
+          Seznam návrhů, fáze, hodnocení postupu a rozbory textů jsou z <a href="https://cosepece.cz/">Hlídače zákonů</a> (cosepece.cz),
+          který bere data z otevřených dat Poslanecké sněmovny a Úřadu vlády. Občanská vrstva k tomu přidává občanské titulky,
+          „komu pomůže / přitíží“, role a odpověď na otázku „musím něco udělat?“.
+        </p>
+        <p>
+          Občanské vysvětlení má zatím <b>{explained} z {inPlay.length}</b> projednávaných návrhů (všechny ve druhém a třetím čtení a po Sněmovně).
+          U ostatních ukazujeme jen to, co víme z Hlídače: název, fázi a větu z jeho rozboru, pokud ji má. Role u nich určujeme automaticky z názvu.
+        </p>
+        <p className="small">
+          Data Hlídače zákonů: {date(aktualizovano)}, {aktualizovano.slice(11, 16)}. Občanská vysvětlení: stav k {date((data as { stav_k: string }).stav_k)}.
+          Když se návrh posune do jiné fáze, u vysvětlení to označíme. <Link href="/hledat">Hledat téma</Link>
+        </p>
+      </section>
     </>
   );
 }

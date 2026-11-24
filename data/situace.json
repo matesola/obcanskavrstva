@@ -39,7 +39,7 @@
           "zdroj": "text návrhu"
         }
       ],
-      "zbystrit": "Mimořádná daň 50 % pro rafinerie platí i za rok 2026, který už běží.",
+      "zbystrit": "Rafinerie by platily mimořádnou daň 50 %, i za rok 2026, který už běží",
       "pomuze": [
         {
           "kdo": "Zemědělci zapsaní jako zemědělští podnikatelé",
@@ -106,7 +106,7 @@
           "zdroj": "PN č. 2181 (Hana Ančincová)"
         }
       ],
-      "zbystrit": "Kdo letos vybral část peněz z penzijka, může vracet daňovou podporu. Zpětně.",
+      "zbystrit": "Kdo letos vybral část peněz z penzijka, mohl by vracet daňovou podporu",
       "pomuze": [
         {
           "kdo": "Lidé do 40 let",
@@ -168,7 +168,7 @@
           "zdroj": "PN č. 1989 (Hubert Lang)"
         }
       ],
-      "zbystrit": "Bezpečnostní novela o uprchlících, do které je vložená reforma správního soudnictví.",
+      "zbystrit": "Pro uprchlíky by platila přísnější pravidla zajištění, dávek a zdravotního pojištění",
       "pomuze": [],
       "pritizi": [
         {
@@ -229,7 +229,7 @@
           "zdroj": "PN č. 824 (David Pražák)"
         }
       ],
-      "zbystrit": "Zemědělci nad 200 ha budou každý měsíc hlásit postřiky. Přilepené změny lesního a mysliveckého zákona.",
+      "zbystrit": "Velcí zemědělci by museli každý měsíc hlásit použité postřiky",
       "pomuze": [
         {
           "kdo": "Myslivci",
@@ -258,7 +258,8 @@
           "jak": "zákaz lovu pod zemí se psy a chovu lišek",
           "zdroj": "PN č. 872 (Jana Patková), výsledek zatím nelze určit"
         }
-      ]
+      ],
+      "ucinnost": "1. 1. 2027"
     },
     "222": {
       "faze": "3. čtení",
@@ -286,7 +287,7 @@
           "zdroj": "text návrhu"
         }
       ],
-      "zbystrit": "Při krizi smí stát pustit na trh zboží bez obvyklé certifikace.",
+      "zbystrit": "Při krizi by stát mohl pustit na trh zboží bez obvyklé certifikace",
       "pomuze": [],
       "pritizi": [
         {
@@ -342,7 +343,7 @@
           "zdroj": "text návrhu"
         }
       ],
-      "zbystrit": "Zatoulané zvíře může připadnout obci a policie smí i do obydlí.",
+      "zbystrit": "Zatoulané zvíře by mohlo připadnout obci a policie by smela i do obydlí",
       "pomuze": [
         {
           "kdo": "Toulavé kočky a jejich ochránci",
@@ -371,7 +372,12 @@
           "jak": "kastrace a označení koček na vlastní náklady",
           "zdroj": "text návrhu"
         }
-      ]
+      ],
+      "srovnani": {
+        "dnes": "záznamy z kamer na jatkách se uchovávají 30 dnů",
+        "navrh": "3 roky",
+        "zdroj": "PN č. 2069 (Jiří Pospíšil), jen pokud projde"
+      }
     },
     "115": {
       "faze": "3. čtení",
@@ -414,7 +420,7 @@
           "zdroj": "PN č. 1581 (Václav Pláteník)"
         }
       ],
-      "zbystrit": "Exekutor může vzít zbrojní průkaz dlužníkům výživného; přísněji za práci cizinců bez povolení.",
+      "zbystrit": "Za neplacení výživného by vězení bez podmínky hrozilo jen výjimečně",
       "pomuze": [
         {
           "kdo": "Lidé stíhaní za neplacení výživného",
@@ -438,7 +444,12 @@
           "jak": "trestné i umožnit práci bez povolení, až 3 roky",
           "zdroj": "PN č. 1422 (Aleš Juchelka), jen pokud projde"
         }
-      ]
+      ],
+      "srovnani": {
+        "dnes": "za neoprávněné zaměstnání cizince horní sazba 6 měsíců",
+        "navrh": "až 3 roky, trestné i umožnit práci",
+        "zdroj": "PN č. 1422 (Aleš Juchelka), jen pokud projde"
+      }
     },
     "300": {
       "faze": "2. čtení",
@@ -491,7 +502,7 @@
           "zdroj": "PN č. 2384 (Marek Novák)"
         }
       ],
-      "zbystrit": "Pravidla pro práci přes aplikace a průhledné platy. Přilepené změny pojistného a vymáhání dluhů státu.",
+      "zbystrit": "Nová pravidla pro práci přes aplikace a průhledné platy; přibalené změny pojistného",
       "pomuze": [
         {
           "kdo": "Kurýři a řidiči přes aplikace",
@@ -524,7 +535,7 @@
     },
     "270": {
       "faze": "3. čtení",
-      "zbystrit": "Důchodci nad 80 let a pracující důchodci dostanou víc.",
+      "zbystrit": "Důchodci nad 80 let a pracující důchodci by dostali vyšší důchod",
       "pomuze": [
         {
           "kdo": "Důchodci od 80 let",
@@ -559,7 +570,7 @@
     },
     "235": {
       "faze": "V Senátu",
-      "zbystrit": "Stát zvedá základ, ze kterého platí zdravotní pojištění za děti, důchodce a další, z 14 074 na 18 362 Kč.",
+      "zbystrit": "Stát by za děti, důchodce a další státní pojištěnce platil pojišťovnám víc",
       "pomuze": [
         {
           "kdo": "Zdravotní pojišťovny a zdravotnictví",
@@ -574,11 +585,17 @@
       ],
       "pritizi": [],
       "koho": [],
-      "nejhorsi": []
+      "nejhorsi": [],
+      "ucinnost": "1. 1. 2027",
+      "srovnani": {
+        "dnes": "základ pojistného za státní pojištěnce 14 074 Kč",
+        "navrh": "18 362 Kč od 1. 1. 2027",
+        "zdroj": "text návrhu"
+      }
     },
     "69": {
       "faze": "V Senátu",
-      "zbystrit": "Nová pravidla pro online platformy a reklamu na internetu, s dozorem a pokutami.",
+      "zbystrit": "Online platformy a reklama na internetu by dostaly pravidla, dozor a pokuty",
       "pomuze": [
         {
           "kdo": "Uživatelé online služeb",
@@ -598,7 +615,7 @@
     },
     "62": {
       "faze": "V Senátu",
-      "zbystrit": "Výrobci budou muset vybrané výrobky opravovat a prodávat náhradní díly.",
+      "zbystrit": "Výrobci by museli vybrané výrobky opravovat a prodávat náhradní díly",
       "pomuze": [
         {
           "kdo": "Spotřebitelé",
@@ -618,7 +635,7 @@
     },
     "58": {
       "faze": "V Senátu",
-      "zbystrit": "Nová pravidla pro baterie. Jedné skupině firem zpětně prodlužuje lhůtu.",
+      "zbystrit": "Nová pravidla pro baterie; jedné skupině firem by se zpětně prodloužila lhůta",
       "pomuze": [
         {
           "kdo": "Kolektivní systémy, které nevytvořily rezervu",
@@ -638,7 +655,7 @@
     },
     "53": {
       "faze": "V Senátu",
-      "zbystrit": "Konec klamavé „zelené“ reklamy a delší odpovědnost za vady po opravě.",
+      "zbystrit": "Klamavá „zelená“ reklama by byla zakázaná a záruka po opravě delší",
       "pomuze": [
         {
           "kdo": "Spotřebitelé",
@@ -658,7 +675,7 @@
     },
     "52": {
       "faze": "V Senátu",
-      "zbystrit": "Online služby musí mít v Česku zástupce, přes kterého jim policie doručí příkaz k vydání dat.",
+      "zbystrit": "Online služby by musely mít v Česku zástupce pro příkazy k vydání dat",
       "pomuze": [],
       "pritizi": [
         {
@@ -672,7 +689,7 @@
     },
     "14": {
       "faze": "V Senátu",
-      "zbystrit": "Přísnější pravidla pro chladiva a omezení anestetika desfluranu v nemocnicích.",
+      "zbystrit": "Přísnější pravidla pro chladiva a omezení anestetika desfluranu v nemocnicích",
       "pomuze": [
         {
           "kdo": "Certifikovaní technici",
@@ -697,7 +714,7 @@
     },
     "231": {
       "faze": "2. čtení",
-      "zbystrit": "Konec poplatků za televizi a rozhlas. Od roku 2027 je platí stát z rozpočtu.",
+      "zbystrit": "Poplatky za televizi a rozhlas by skončily, od roku 2027 by je platil stát",
       "pomuze": [
         {
           "kdo": "Domácnosti a firmy",
@@ -707,19 +724,26 @@
       ],
       "pritizi": [],
       "koho": [],
-      "nejhorsi": []
+      "nejhorsi": [],
+      "ucinnost": "1. 1. 2027",
+      "srovnani": {
+        "dnes": "domácnosti a firmy platí televizní a rozhlasové poplatky",
+        "navrh": "poplatky by skončily, ČT a ČRo by dostávaly příspěvek ze státního rozpočtu",
+        "zdroj": "text návrhu"
+      }
     },
     "324": {
       "faze": "2. čtení",
-      "zbystrit": "Rozpočet na rok 2027 se schodkem 386 miliard Kč.",
+      "zbystrit": "Státní rozpočet na rok 2027: navržený schodek 386 miliard Kč",
       "pomuze": [],
       "pritizi": [],
       "koho": [],
-      "nejhorsi": []
+      "nejhorsi": [],
+      "ucinnost": "1. 1. 2027"
     },
     "210": {
       "faze": "3. čtení",
-      "zbystrit": "Velké firmy na burze si musí dát cíl zastoupení žen a mužů ve vedení.",
+      "zbystrit": "Velké firmy na burze by si musely dát cíl zastoupení žen a mužů ve vedení",
       "pomuze": [
         {
           "kdo": "Méně zastoupené pohlaví",
@@ -739,7 +763,7 @@
     },
     "173": {
       "faze": "3. čtení",
-      "zbystrit": "Vyšší tresty za týrání zvířat, nově i za usmrcení psa nebo kočky ze zavrženíhodné pohnutky.",
+      "zbystrit": "Za týrání zvířat by hrozily vyšší tresty",
       "pomuze": [],
       "pritizi": [
         {
@@ -753,7 +777,7 @@
     },
     "46": {
       "faze": "3. čtení",
-      "zbystrit": "Úřady z jiných států EU si snáz vyžádají data od online služeb.",
+      "zbystrit": "Úřady z jiných států EU by si snáz vyžádaly data od online služeb",
       "pomuze": [],
       "pritizi": [
         {
@@ -767,7 +791,7 @@
     },
     "228": {
       "faze": "2. čtení",
-      "zbystrit": "Stát založí registry všech žáků, studentů a učitelů, se zápisem zpětně od roku 2018.",
+      "zbystrit": "Stát by založil registry všech žáků, studentů a učitelů, zpětně od roku 2018",
       "pomuze": [],
       "pritizi": [
         {
@@ -781,7 +805,7 @@
     },
     "301": {
       "faze": "2. čtení",
-      "zbystrit": "Kdo pracuje přes aplikaci, bude se považovat za zaměstnance, dokud platforma neprokáže opak.",
+      "zbystrit": "Kdo pracuje přes aplikaci, byl by zaměstnanec, dokud platforma neprokáže opak",
       "pomuze": [
         {
           "kdo": "Kurýři a řidiči přes aplikace",
@@ -801,7 +825,7 @@
     },
     "286": {
       "faze": "2. čtení",
-      "zbystrit": "Lepší ochrana obchodního tajemství, i během soudního sporu.",
+      "zbystrit": "Firmy by měly silnější ochranu obchodního tajemství, i u soudu",
       "pomuze": [
         {
           "kdo": "Firmy",
@@ -811,11 +835,12 @@
       ],
       "pritizi": [],
       "koho": [],
-      "nejhorsi": []
+      "nejhorsi": [],
+      "ucinnost": "1. 1. 2027"
     },
     "260": {
       "faze": "2. čtení",
-      "zbystrit": "Evidence skutečných majitelů firem přestane být veřejná. Jen pro ty, kdo prokážou oprávněný zájem.",
+      "zbystrit": "Evidence skutečných majitelů firem by přestala být veřejná",
       "pomuze": [
         {
           "kdo": "Majitelé firem",
@@ -831,11 +856,16 @@
         }
       ],
       "koho": [],
-      "nejhorsi": []
+      "nejhorsi": [],
+      "srovnani": {
+        "dnes": "evidence skutečných majitelů je veřejně přístupná",
+        "navrh": "přístup jen s ověřeným oprávněným zájmem",
+        "zdroj": "text návrhu"
+      }
     },
     "207": {
       "faze": "2. čtení",
-      "zbystrit": "Nové trestné činy proti životnímu prostředí, včetně nakládání se rtutí.",
+      "zbystrit": "Přibyly by trestné činy proti životnímu prostředí, i za nakládání se rtutí",
       "pomuze": [],
       "pritizi": [
         {
@@ -849,7 +879,7 @@
     },
     "162": {
       "faze": "2. čtení",
-      "zbystrit": "Obrana proti šikanózním žalobám na svobodu projevu. Záloha na překlad i v rozjetých sporech.",
+      "zbystrit": "Ochrana před šikanózními žalobami; ve sporech s cizinou záloha na překlad",
       "pomuze": [
         {
           "kdo": "Novináři a aktivisté",
@@ -874,7 +904,7 @@
     },
     "143": {
       "faze": "3. čtení",
-      "zbystrit": "Povinné varování u dluhopisů, i u těch už vydaných.",
+      "zbystrit": "Dluhopisy by musely nést povinné varování, i ty už vydané",
       "pomuze": [
         {
           "kdo": "Drobní investoři",
@@ -894,7 +924,7 @@
     },
     "279": {
       "faze": "2. čtení",
-      "zbystrit": "Zprávy o udržitelnosti: jedna státní banka jmenovitě vyňata, prahy zpětně od roku 2025.",
+      "zbystrit": "Jedna státní banka by byla jmenovitě vyňata z povinných zpráv o udržitelnosti",
       "pomuze": [
         {
           "kdo": "Jmenovitě uvedená státní banka",
@@ -910,11 +940,12 @@
         }
       ],
       "koho": [],
-      "nejhorsi": []
+      "nejhorsi": [],
+      "ucinnost": "1. 1. 2027"
     },
     "216": {
       "faze": "2. čtení",
-      "zbystrit": "Podat někomu drogu bez jeho vědomí bude trestné až na 10 let.",
+      "zbystrit": "Podat někomu drogu bez jeho vědomí by bylo trestné až na 10 let",
       "pomuze": [
         {
           "kdo": "Oběti",
@@ -928,15 +959,16 @@
     },
     "35": {
       "faze": "2. čtení",
-      "zbystrit": "Platová základna poslanců, senátorů a ministrů do konce roku 2030 pevně 101 364 Kč.",
+      "zbystrit": "Platová základna poslanců, senátorů a ministrů by byla do roku 2030 pevná",
       "pomuze": [],
       "pritizi": [],
       "koho": [],
-      "nejhorsi": []
+      "nejhorsi": [],
+      "ucinnost": "1. 1. 2026 (datum v návrhu už uplynulo)"
     },
     "218": {
       "faze": "2. čtení",
-      "zbystrit": "Nová pravidla DPH pro e-shopy a online tržiště.",
+      "zbystrit": "E-shopy a online tržiště by měly nová pravidla DPH",
       "pomuze": [],
       "pritizi": [
         {
@@ -950,7 +982,7 @@
     },
     "114": {
       "faze": "2. čtení",
-      "zbystrit": "Uhlíkové clo na dovoz: jistoty, certifikáty a pokuty.",
+      "zbystrit": "Dovozci oceli, hliníku, cementu a hnojiv by kupovali uhlíkové certifikáty",
       "pomuze": [],
       "pritizi": [
         {
@@ -960,11 +992,12 @@
         }
       ],
       "koho": [],
-      "nejhorsi": []
+      "nejhorsi": [],
+      "ucinnost": "den po vyhlášení"
     },
     "98": {
       "faze": "2. čtení",
-      "zbystrit": "Kryptoburzy budou hlásit transakce a účty klientů finanční správě, i za rok 2026.",
+      "zbystrit": "Kryptoburzy by hlásily transakce klientů finanční správě, i za rok 2026",
       "pomuze": [],
       "pritizi": [
         {
@@ -983,7 +1016,7 @@
     },
     "193": {
       "faze": "2. čtení",
-      "zbystrit": "Autorizovaná obalová společnost nesmí rozdělovat zisk a jeden akcionář smí mít nejvýš 3 %.",
+      "zbystrit": "Obalová společnost by nesměla rozdělovat zisk, akcionář nejvýš 3 %",
       "pomuze": [],
       "pritizi": [
         {
@@ -997,7 +1030,7 @@
     },
     "192": {
       "faze": "2. čtení",
-      "zbystrit": "Národní knihovna bude archivovat volně dostupný web.",
+      "zbystrit": "Národní knihovna by archivovala volně dostupný web",
       "pomuze": [
         {
           "kdo": "Veřejnost a badatelé",
@@ -1013,11 +1046,12 @@
         }
       ],
       "koho": [],
-      "nejhorsi": []
+      "nejhorsi": [],
+      "ucinnost": "1. 1. 2027"
     },
     "153": {
       "faze": "2. čtení",
-      "zbystrit": "Přísnější pravidla pro reklamu na léky a zdravotnické prostředky.",
+      "zbystrit": "Reklama na léky a zdravotnické prostředky by měla přísnější pravidla",
       "pomuze": [],
       "pritizi": [
         {
@@ -1027,11 +1061,12 @@
         }
       ],
       "koho": [],
-      "nejhorsi": []
+      "nejhorsi": [],
+      "ucinnost": "1. 1. 2027"
     },
     "47": {
       "faze": "3. čtení",
-      "zbystrit": "NKÚ smí kontrolovat hospodaření České televize a Českého rozhlasu.",
+      "zbystrit": "NKÚ by smělo kontrolovat hospodaření České televize a Českého rozhlasu",
       "pomuze": [],
       "pritizi": [
         {
@@ -1041,19 +1076,26 @@
         }
       ],
       "koho": [],
-      "nejhorsi": []
+      "nejhorsi": [],
+      "ucinnost": "1. 7. 2026 (datum v návrhu už uplynulo)",
+      "srovnani": {
+        "dnes": "NKÚ hospodaření ČT a ČRo nekontroluje",
+        "navrh": "NKÚ by je kontrolovat smělo",
+        "zdroj": "text návrhu"
+      }
     },
     "116": {
       "faze": "2. čtení",
-      "zbystrit": "Ruší se zákon o výběru lidí do vedení státních firem.",
+      "zbystrit": "Zákon o výběru lidí do vedení státních firem by se zrušil",
       "pomuze": [],
       "pritizi": [],
       "koho": [],
-      "nejhorsi": []
+      "nejhorsi": [],
+      "ucinnost": "první den měsíce po vyhlášení"
     },
     "64": {
       "faze": "2. čtení",
-      "zbystrit": "Převod státního majetku bez povinného ocenění podle zákona o oceňování.",
+      "zbystrit": "Stát by mohl převádět majetek bez povinného ocenění podle zákona o oceňování",
       "pomuze": [],
       "pritizi": [],
       "koho": [],
@@ -1061,7 +1103,7 @@
     },
     "63": {
       "faze": "2. čtení",
-      "zbystrit": "Nový zákon o účetnictví pro firmy, obce i stát.",
+      "zbystrit": "Firmy, obce i stát by se řídily novým zákonem o účetnictví",
       "pomuze": [],
       "pritizi": [
         {

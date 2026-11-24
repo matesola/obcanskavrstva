@@ -1,62 +1,75 @@
 import Link from "next/link";
-import type { Bill } from "@/lib/api";
-import { GROUPS, LEVEL, date, kind, perex, subtitle, title } from "@/lib/text";
-import Path from "./Path";
-import { condition, type Situation, type Who } from "@/lib/situace";
+import type { BillView } from "@/lib/model";
+import { ROLE_LABEL } from "@/lib/roles";
+import { condition, type Who } from "@/lib/situace";
 
-function Side({ sign, label, list }: { sign: string; label: string; list?: Who[] }) {
-  if (!list || list.length === 0) return null;
+function Impact({ sign, word, w }: { sign: string; word: string; w?: Who }) {
+  if (!w) return null;
+  const cond = condition(w.zdroj);
   return (
-    <ul className={`pm pm-${sign === "▲" ? "plus" : "minus"}`} aria-label={label}>
-      {list.slice(0, 2).map((w) => (
-        <li key={w.kdo}>
-          <span className="pm-sign" aria-hidden="true">{sign}</span>
-          <span><b>{w.kdo}</b>: {w.jak}{condition(w.zdroj) && <span className="pm-cond"> ({condition(w.zdroj)})</span>}</span>
-        </li>
-      ))}
-      {list.length > 2 && <li className="pm-more">a {list.length - 2} další v detailu</li>}
-    </ul>
+    <li className={sign === "▲" ? "pm-plus" : "pm-minus"}>
+      <span className="pm-sign" aria-hidden="true">{sign}</span>
+      <span>
+        <span className="pm-word">{word}</span> <b>{w.kdo}</b>: {w.jak}
+        {cond && <span className="pm-cond"> ({cond})</span>}
+      </span>
+    </li>
   );
 }
 
-export default function BillCard({ b, sit }: { b: Bill; sit?: Situation | null }) {
-  const groups = b.rozbor?.skupiny ?? [];
-  const p = perex(b);
-  const sub = subtitle(b);
-  const worst = b.uroven === "major" ? sit?.nejhorsi[0] : undefined;
+/** Úroveň 1: občanská karta. Titulek o změně v životě, dopad, koho se týká, stav, odpověď „musím něco udělat?“. */
+export default function BillCard({ v }: { v: BillView }) {
+  const more = v.pomuze.length + v.pritizi.length - (v.pomuze.length ? 1 : 0) - (v.pritizi.length ? 1 : 0);
   return (
-    <Link href={`/tisk/${b.ct}`} className="card" data-groups={groups.join(" ")}>
+    <article className="card" data-roles={v.roles.map((r) => r.key).join(" ")}>
       <div className="meta">
-        {b.uroven !== "normal" && <span className={`level level-${b.uroven}`}>{LEVEL[b.uroven] ?? b.uroven}</span>}
-        <span>Tisk {b.ct}</span>
-        <span>{kind(b.typ_navrhu)}</span>
-        {b.posledni_zmena && <span>{date(b.posledni_zmena)}</span>}
+        <span className={`status status-${v.status.kind}`}>{v.status.label}</span>
+        {v.uroven === "major" && <span className="flag">Hlídač: závažný postup</span>}
+        {v.uroven === "watch" && <span className="flag flag-soft">Hlídač: pozor na postup</span>}
       </div>
-      <h3>{title(b)}</h3>
-      {sub && !(sit?.zbystrit && !b.rozbor?.titulek) && <p className="sub">{sub}</p>}
-      {sit?.zbystrit && <p className="alert"><span className="alert-label">Proč zbystřit</span> {sit.zbystrit}</p>}
-      {p && !worst && !sit?.zbystrit && <p className="perex">{p}</p>}
-      <Side sign="▲" label="Komu pomůže" list={sit?.pomuze} />
-      <Side sign="▼" label="Komu přitíží" list={sit?.pritizi} />
-      {sit && sit.koho.length > 0 && !(sit.pomuze?.length || sit.pritizi?.length) && (
-        <p className="who-line">
-          <b>Koho:</b> {sit.koho.slice(0, 3).map((k) => k.kdo).join(" · ")}
-          {sit.koho.length > 3 ? ` a další` : ""}
+      <h3>
+        <Link prefetch={false} href={`/tisk/${v.ct}`} className="stretch">{v.title}</Link>
+      </h3>
+      {v.title !== v.law && <p className="sub">{v.law}</p>}
+      {v.pomuze.length + v.pritizi.length > 0 ? (
+        <ul className="pm">
+          <Impact sign="▲" word="Pomůže:" w={v.pomuze[0]} />
+          <Impact sign="▼" word="Přitíží:" w={v.pritizi[0]} />
+          {more > 0 && <li className="pm-more">a {more} další dopad{more > 1 ? "y" : ""} v detailu</li>}
+        </ul>
+      ) : (
+        v.summary && <p className="perex">{v.summary}</p>
+      )}
+      {v.roles.length > 0 && (
+        <p className="roles">
+          <span className="roles-label">Týká se:</span>{" "}
+          {v.roles.map((r, i) => (
+            <span key={r.key} className="role" data-role={r.key}>
+              {ROLE_LABEL[r.key]}
+              <span className="why" data-role={r.key}> (proč: {r.why})</span>
+              {i < v.roles.length - 1 ? ", " : ""}
+            </span>
+          ))}
         </p>
       )}
-      {worst && (
-        <div className="worst-mini">
-          <span className="worst-label">V nejhorším případě</span>
-          <strong>{worst.titulek}</strong>
-          <span className="cond">{worst.podminka}</span>
-        </div>
-      )}
-      {groups.length > 0 && !sit && (
-        <ul className="groups">
-          {groups.map((g) => <li key={g}>{GROUPS[g] ?? g}</li>)}
-        </ul>
-      )}
-      <Path faze={b.faze} />
-    </Link>
+      <p className="act"><b>Musím něco udělat?</b> {v.status.act}</p>
+      {v.stale && <p className="stale">{v.stale}</p>}
+    </article>
+  );
+}
+
+/** Kompaktní řádek pro dlouhé seznamy. */
+export function BillRow({ v }: { v: BillView }) {
+  return (
+    <li data-roles={v.roles.map((r) => r.key).join(" ")}>
+      <Link prefetch={false} href={`/tisk/${v.ct}`}>
+        <strong>{v.title}</strong>
+        <span>
+          {v.status.label}
+          {v.roles.length > 0 ? ` · týká se: ${v.roles.map((r) => ROLE_LABEL[r.key].toLowerCase()).join(", ")}` : ""}
+          {v.uroven === "major" ? " · Hlídač: závažný postup" : ""}
+        </span>
+      </Link>
+    </li>
   );
 }

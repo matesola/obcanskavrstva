@@ -8,7 +8,7 @@ import type { BillDetail, PnResult } from "./api";
 
 export type Who = { kdo: string; jak: string; zdroj: string };
 export type Worst = { titulek: string; pribeh: string; podminka: string; pojistka: string; citace: string[]; zdroj: string };
-export type Situation = { faze?: string; zbystrit?: string; pomuze?: Who[]; pritizi?: Who[]; koho: Who[]; nejhorsi: Worst[] };
+export type Situation = { faze?: string; zbystrit?: string; ucinnost?: string; srovnani?: { dnes: string; navrh: string; zdroj: string }; pomuze?: Who[]; pritizi?: Who[]; koho: Who[]; nejhorsi: Worst[] };
 
 const all = (data as unknown as { tisky: Record<string, Situation> }).tisky;
 

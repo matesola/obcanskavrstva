@@ -75,8 +75,10 @@ function fromFullName(uplny: string): string | null {
     const amend = tail.match(/^kterým se mění (?:ústavní )?zákon č\. [\d/]+ Sb\., (?:kterým se mění zákon č\. [\d/]+ Sb\., )?(.+)$/);
     if (amend) {
       // krátké jméno v závorce má přednost: „(zákon o silničním provozu)“, „(energetický zákon)“
-      const paren = amend[1].match(/\((zákon o [^)]+|[^)]*zákon[^)]*|[^)]*řád|[^)]*zákoník)\)/);
-      let subject = paren ? paren[1] : amend[1].split(/, ve znění|, a (?:další|některé|zákon)| a o změn|, kterým/)[0];
+      // jen první měněný zákon: závorka s krátkým jménem musí patřit jemu, ne dalšímu zákonu v pořadí
+      const first = amend[1].split(/, ve znění|, a (?:další|některé|zákon)/)[0];
+      const paren = first.match(/\((zákon o [^)]+|[^)]*zákon[^)]*|[^)]*řád|[^)]*zákoník)\)/);
+      let subject = paren ? paren[1] : first.split(/ a o změn|, kterým/)[0];
       subject = subject.replace(/,$/, "").trim();
       if (constitutional) return `Novela ústavního zákona: ${subject}`;
       if (/^zákon o /.test(subject)) return `Novela ${subject.replace(/^zákon/, "zákona")}`;

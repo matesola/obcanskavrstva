@@ -83,14 +83,13 @@ export type Upcoming = {
   popis: string;
 };
 
+// Výpadek zdroje: chyba se vyhodí, takže Next.js při obnově ponechá poslední úspěšně vygenerovanou stránku
+// (ISR) a nezobrazí místo dat chybovou hlášku. Neexistující tisk (404) vrací null.
 async function get<T>(query: string): Promise<T | null> {
-  try {
-    const res = await fetch(`${API}${query}`, { next: { revalidate: REVALIDATE } });
-    if (!res.ok) return null;
-    return (await res.json()) as T;
-  } catch {
-    return null;
-  }
+  const res = await fetch(`${API}${query}`, { next: { revalidate: REVALIDATE } });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`Hlídač zákonů neodpověděl (${res.status}) pro ${query}`);
+  return (await res.json()) as T;
 }
 
 export async function bills(): Promise<{ tisky: Bill[]; aktualizovano: string } | null> {
@@ -103,6 +102,11 @@ export async function bill(ct: number): Promise<BillDetail | null> {
 }
 
 export async function upcoming(): Promise<Upcoming[]> {
-  const data = await get<{ pripravovane: Upcoming[] }>("?pripravovane=1");
-  return data?.pripravovane ?? [];
+  // připravované zákony jsou doplněk: jejich výpadek nesmí shodit celou stránku
+  try {
+    const data = await get<{ pripravovane: Upcoming[] }>("?pripravovane=1");
+    return data?.pripravovane ?? [];
+  } catch {
+    return [];
+  }
 }
