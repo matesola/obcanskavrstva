@@ -61,7 +61,7 @@ final class Api
     public function bills(array $f): array
     {
         // tisky aktuálního období od poslední změny, se skóre a důvody
-        $out = [];
+        $rows = [];
         foreach ($this->repo->bills('', '', 1000, 'recent', (int)($f['min_score'] ?? 0)) as $t) {
             if ($f['since'] !== '' && (string)$t['posledni'] < $f['since']) {
                 continue;
@@ -69,12 +69,20 @@ final class Api
             if ($f['zakon'] !== '' && !in_array($f['zakon'], explode(',', (string)$t['zakony']), true)) {
                 continue;
             }
-            $out[] = $this->summary($t);
-            if (count($out) >= $f['limit']) {
+            $rows[] = $t;
+            if (count($rows) >= $f['limit']) {
                 break;
             }
         }
-        return $out;
+        // rozbory textů návrhů jedním dotazem (ne dotaz na každý tisk)
+        $ai = [];
+        if ($rows !== []) {
+            $cts = array_map(fn(array $t) => (int)$t['ct'], $rows);
+            foreach ($this->db->all('SELECT ct, ai_json FROM tisk_text WHERE ai_at IS NOT NULL AND ct IN (' . implode(',', $cts) . ')') as $r) {
+                $ai[(int)$r['ct']] = json_decode((string)$r['ai_json'], true) ?: null;
+            }
+        }
+        return array_map(fn(array $t) => $this->summary($t) + ['rozbor' => self::review($ai[(int)$t['ct']] ?? null, false)], $rows);
     }
 
     public function bill(int $ct): ?array
@@ -84,6 +92,12 @@ final class Api
             return null;
         }
         $out = $this->summary($t);
+        $billAi = $this->repo->billText($ct)['ai'] ?? null;
+        $out['rozbor'] = self::review($billAi, true);
+        // nejzávažnější nález doložený citací (text návrhu nebo PN), stejný jako titulek na úvodní stránce webu
+        $head = $this->repo->headline($ct);
+        $out['hlavni_nalez'] = $head === null ? null : ['titulek' => $head['title'], 'perex' => $head['perex'], 'citace' => $head['quote'],
+            'zdroj' => $head['source'], 'overeno' => $head['verified']];
         $out['hlasovani'] = array_map(fn(array $v) => [
             'id' => (int)$v['id_hlasovani'], 'datum' => $v['datum'], 'vysledek' => $v['vysledek'] === 'A' ? 'přijato' : 'zamítnuto',
             'pro' => (int)$v['pro'], 'proti' => (int)$v['proti'], 'zdrzel' => (int)$v['zdrzel'], 'kvorum' => (int)$v['kvorum'],
@@ -95,7 +109,7 @@ final class Api
         $status = $this->repo->reviewStatus($ct)[$ct] ?? ['total' => 0, 'done' => 0];
         $out['rozbor_textu'] = ['posouzeno' => (int)$status['done'], 'celkem' => (int)$status['total']];
         // dopad textu návrhu na občany z rozboru AI (null, dokud ho rozbor neobsahuje); do skóre nevstupuje
-        $out['dopad'] = Impact::forApi($this->repo->billText($ct)['ai'] ?? null);
+        $out['dopad'] = Impact::forApi($billAi);
         // výsledek písemných pozměňovacích návrhů ve 3. čtení (prázdné, dokud není souhrn PN a hlasování)
         $out['vysledky_pn'] = array_values(array_map(fn(array $r) => [
             'cislo' => (int)$r['cislo'], 'pismena' => array_values(array_filter(array_map('trim', explode(',', (string)$r['pismena'])))),
@@ -167,6 +181,28 @@ final class Api
             'vlada_projednala' => $u['vlada'], 'mimo_plan' => (bool)$u['mimo_plan'], 'vyjimka' => (bool)$u['vyjimka'],
             'popis' => $u['popis'], 'duvod' => $u['duvod'], 'veklep_url' => GovPrep::url((string)$u['pid']),
         ], $this->repo->upcoming($kind));
+    }
+
+    /**
+     * Srozumitelné shrnutí z rozboru textu návrhu (AI): titulek, perex, shrnutí a skupiny dotčených z dopadu.
+     * Null, dokud text návrhu nemá rozbor. Do skóre nevstupuje; titulek je i u běžné agendy (bez prahu závažnosti).
+     */
+    public static function review(?array $ai, bool $detail): ?array
+    {
+        if ($ai === null || trim((string)($ai['titulek'] ?? '')) === '') {
+            return null;
+        }
+        $impact = Impact::normalize($ai['dopad'] ?? null);
+        $out = [
+            'titulek' => trim((string)$ai['titulek']),
+            'perex' => trim((string)($ai['perex'] ?? '')),
+            'skupiny' => $impact['skupiny'] ?? [],
+        ];
+        if ($detail) {
+            $out['shrnuti'] = trim((string)($ai['shrnuti'] ?? ''));
+            $out['zavaznost'] = (int)($ai['zavaznost'] ?? 0);
+        }
+        return $out;
     }
 
     private function summary(array $t): array
