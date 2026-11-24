@@ -170,6 +170,7 @@ View::header('Tisk ' . $ct . ' – ' . $t['nazev'], 'tisky', mb_substr($ogDesc, 
   <?= View::aiRounds($billText) ?>
   <?php if (!empty($bai['shrnuti'])): ?><p><?= e($bai['shrnuti']) ?></p><?php endif; ?>
   <?php if (!empty($bai['duvod'])): ?><p class="muted"><?= e($bai['duvod']) ?></p><?php endif; ?>
+  <?= View::impact($bai) ?>
   <?php foreach ((array)($bai['upravy'] ?? []) as $note): ?><p class="muted small">Automatická korekce: <?= e((string)$note) ?></p><?php endforeach; ?>
   <?php
     // doslovné citace: ověřené citace AI, jinak pasáže nalezené pravidly

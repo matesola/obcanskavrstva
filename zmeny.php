@@ -9,6 +9,9 @@ use Hlidac\View;
 
 // [datum, nadpis, popis, čísla PR na GitHubu, mění skóre?]
 $changes = [
+    ['2026-11-24', 'Co to znamená pro lidi',
+        'Rozbor textu návrhu nově popisuje i dopad na občany: koho se změna týká (z pevného seznamu skupin, například zaměstnanci, OSVČ, rodiny s dětmi, chovatelé), odkdy má platit, jaké přináší nové povinnosti, pravomoci úřadů a sankce, a kde text dává pravomoc nebo výjimku bez jasných mezí (rizika a pojistky). Každá položka musí mít doslovnou citaci, kterou ověříme v textu návrhu; co citaci nemá, nezobrazíme. Dopad nehodnotí, zda je změna dobrá, a do skóre nevstupuje. Je v detailu tisku a v API (api.php?tisk=…, pole dopad). Všechny texty proto AI postupně posoudí znovu; dokud nový rozbor nedoběhne, zůstává zobrazený ten dosavadní, a skóre tisků se při přepočtu může mírně pohnout.',
+        [], true],
     ['2026-11-23', 'Všechny hlavní stránky v horním menu',
         'Stránky Zákony, Data a API, Pro AI asistenty a Co jsme změnili byly dosud jen v patičce. Teď jsou v horním menu vedle ostatních. Na telefonu je menu jeden řádek, který se posouvá do strany, takže nezabírá víc místa než dřív.',
         [75], false],

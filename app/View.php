@@ -220,6 +220,50 @@ final class View
         return '<span class="chip chip-' . e($class) . '">' . e($label) . '</span>';
     }
 
+    /**
+     * Dopad na občany z rozboru AI (app/Impact.php): koho se týká, odkdy, povinnosti, pravomoci, sankce,
+     * rizika a pojistky. Každá položka má doslovnou citaci (sbalenou). Prázdný řetězec, když dopad chybí.
+     */
+    public static function impact(?array $ai): string
+    {
+        $impact = Impact::normalize($ai['dopad'] ?? null);
+        if (!Impact::hasContent($impact)) {
+            return '';
+        }
+        $quote = fn(string $q): string => '<details class="impact-quote"><summary>Citace</summary><blockquote class="quote">' . e($q) . '</blockquote></details>';
+        $html = '<div class="impact" id="dopad"><h3>Co to znamená pro lidi</h3>';
+        if ($impact['skupiny'] !== []) {
+            $html .= '<p class="chips"><span class="muted small">Týká se:</span> ';
+            foreach (Impact::groupLabels($impact['skupiny']) as $label) {
+                $html .= '<span class="chip chip-watch">' . e($label) . '</span> ';
+            }
+            $html .= '</p>';
+        }
+        if ($impact['ucinnost'] !== null) {
+            $html .= '<div class="impact-when"><strong>Platí od:</strong> ' . e($impact['ucinnost']['text']) . $quote($impact['ucinnost']['citace']) . '</div>';
+        }
+        $lists = [
+            'povinnosti' => ['Nové povinnosti', fn(array $i) => '<strong>' . e($i['kdo']) . ':</strong> ' . e($i['co'])],
+            'pravomoci' => ['Nové pravomoci', fn(array $i) => '<strong>' . e($i['kdo']) . ':</strong> ' . e($i['co'])],
+            'sankce' => ['Sankce', fn(array $i) => e($i['za_co']) . ($i['vyse'] !== '' ? ': <strong>' . e($i['vyse']) . '</strong>' : '')],
+            'rizika' => ['Rizika a pojistky', fn(array $i) => e($i['popis']) . ($i['pojistka'] !== '' ? '<br><span class="muted">Pojistka: ' . e($i['pojistka']) . '</span>' : '')],
+        ];
+        foreach ($lists as $key => [$title, $line]) {
+            if ($impact[$key] === []) {
+                continue;
+            }
+            $html .= '<h4>' . e($title) . '</h4><ul class="impact-list">';
+            foreach ($impact[$key] as $item) {
+                $html .= '<li>' . $line($item) . $quote($item['citace']) . '</li>';
+            }
+            $html .= '</ul>';
+        }
+        $html .= '<p class="muted small">Popis dopadu připravil jazykový model (AI) a může se mýlit. Nehodnotí, zda je změna dobrá, a do skóre nevstupuje.'
+            . ($impact['rizika'] !== [] ? ' Rizika popisují, co text umožňuje, ne co kdo zamýšlí; pojistky mohou být i v platném zákoně, který návrh mění.' : '')
+            . '</p></div>';
+        return $html;
+    }
+
     public static function aiRounds(array $x): string
     {
         // kdo rozbor udělal; po ověření silnějším modelem i výsledek 1. kola

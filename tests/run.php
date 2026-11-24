@@ -311,6 +311,46 @@ check('„, tedy i zpětně“', Hlidac\AiReviewer::stripRetroWord('Zákaz plat�
 check('„zpětně“ na začátku', Hlidac\AiReviewer::stripRetroWord('Zpětně se ruší poplatek'), 'Se ruší poplatek');
 $hard = Hlidac\AiReviewer::sanitize(['titulek' => 'Daň se použije i zpětně za rok 2026', 'zavaznost' => 8, 'zpetnost_smer' => 'nova_povinnost']);
 check('zpětná nová daň zůstane beze změny', [$hard['zavaznost'], $hard['titulek'], isset($hard['upravy'])], [8, 'Daň se použije i zpětně za rok 2026', false]);
+
+echo "Dopad na občany (app/Impact.php)\n";
+$q221 = 'Řízení o uložení odvodu za porušení rozpočtové kázně lze zahájit nejpozději do 4 let od porušení rozpočtové kázně.';
+$impactRaw = [
+    'skupiny' => ['prijemci_dotaci', 'Zemědělci', 'neexistuje', 'prijemci_dotaci', 'obce'],
+    'ucinnost' => ['text' => '1. ledna 2028', 'citace' => 'Tento zákon nabývá účinnosti dnem 1. ledna 2028.'], // v textu není
+    'povinnosti' => [['kdo' => 'Úřady', 'co' => 'Zahájit řízení do 4 let', 'citace' => $q221], ['kdo' => 'x', 'co' => 'bez citace']],
+    'pravomoci' => [],
+    'sankce' => 'nesmysl',
+    'rizika' => [['popis' => 'Kratší lhůta omezuje vymáhání neoprávněně čerpaných dotací.', 'pojistka' => 'v textu návrhu neuvedena', 'citace' => $q221],
+        ['popis' => 'Vymyšlené riziko', 'pojistka' => '', 'citace' => 'Věta, která v textu návrhu vůbec není, ale je dost dlouhá.']],
+];
+$norm = Hlidac\Impact::normalize($impactRaw);
+check('dopad: skupiny jen z číselníku, bez duplicit', $norm['skupiny'], ['prijemci_dotaci', 'obce']);
+check('dopad: položka bez citace se zahodí', count($norm['povinnosti']), 1);
+check('dopad: nesmyslný seznam je prázdný', $norm['sankce'], []);
+check('dopad: úklid je idempotentní', Hlidac\Impact::normalize($norm), $norm);
+check('dopad: prázdný dopad nic nezobrazí', [Hlidac\Impact::hasContent(Hlidac\Impact::normalize([])), Hlidac\View::impact(['dopad' => []])], [false, '']);
+check('dopad: starý rozbor bez dopadu ho nedostane', array_key_exists('dopad', Hlidac\AiReviewer::sanitize(['zavaznost' => 3, 'titulek' => 'x'])), false);
+check('dopad: formát odpovědi ho po modelu chce', str_contains(Hlidac\AiReviewer::format(), '"dopad": {"skupiny"') && str_contains(Hlidac\AiReviewer::format(), 'drzitele_zbrani'), true);
+$keep221 = db()->one('SELECT ai_json, ai_score, ai_at, ai_model, ai_prompt, ai_runs, ai_run_count, ai_prev_json, ai_prev_score, ai_prev_model FROM tisk_text WHERE ct = 221');
+$impactReviewer = new Hlidac\AiReviewer(db(), config());
+$impactReviewer->saveResult('tisk', 221, ['zavaznost' => 8, 'titulek' => 'Lhůta pro vymáhání dotací se zkracuje na 4 roky', 'citace' => [$q221], 'dopad' => $impactRaw], 'claude-sonnet-5-5');
+$stored = json_decode((string)db()->value('SELECT ai_json FROM tisk_text WHERE ct = 221'), true);
+check('dopad: neověřené citace z rozboru vyřazeny', [$stored['dopad']['ucinnost'], count($stored['dopad']['rizika']), count($stored['dopad']['povinnosti'])], [null, 1, 1]);
+check('dopad: vyřazení je zapsané v korekcích', in_array('z dopadu vyřazeny položky bez citace ověřené v textu (3)', $stored['upravy'] ?? [], true), true);
+check('dopad: do závažnosti nevstupuje', (int)db()->value('SELECT ai_score FROM tisk_text WHERE ct = 221'), 8);
+$_GET = ['ct' => '221'];
+ob_start();
+(function (string $file): void {
+    require $file;
+})(APP_ROOT . '/tisk.php');
+$htmlImpact = (string)ob_get_clean();
+check('dopad: detail tisku ukazuje skupiny a rizika', str_contains($htmlImpact, 'Co to znamená pro lidi') && str_contains($htmlImpact, 'Příjemci dotací')
+    && str_contains($htmlImpact, 'Rizika a pojistky') && !str_contains($htmlImpact, 'Vymyšlené riziko'), true);
+$apiImpact = (new Hlidac\Api(db(), new Hlidac\Repo(db()), config()))->bill(221)['dopad'] ?? null;
+check('dopad: api.php?tisk= vrací skupiny s názvy', $apiImpact['skupiny'][0] ?? null, ['klic' => 'prijemci_dotaci', 'nazev' => 'Příjemci dotací']);
+db()->run('UPDATE tisk_text SET ai_json = ?, ai_score = ?, ai_at = ?, ai_model = ?, ai_prompt = ?, ai_runs = ?, ai_run_count = ?, ai_prev_json = ?, ai_prev_score = ?, ai_prev_model = ? WHERE ct = 221',
+    array_values($keep221));
+check('dopad: api bez dopadu vrací null', (new Hlidac\Api(db(), new Hlidac\Repo(db()), config()))->bill(221)['dopad'], null);
 db()->run("UPDATE tisky SET posledni = '2020-01-01', faze = '1. čtení' WHERE ct = 221"); // rozpracovaný, dlouho bez aktivity
 $scorer->scoreBills();
 $_GET = [];

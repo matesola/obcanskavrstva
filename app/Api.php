@@ -94,6 +94,8 @@ final class Api
         $out['upozorneni'] = array_map([$this, 'alert'], $this->repo->alerts(100, 0, $ct));
         $status = $this->repo->reviewStatus($ct)[$ct] ?? ['total' => 0, 'done' => 0];
         $out['rozbor_textu'] = ['posouzeno' => (int)$status['done'], 'celkem' => (int)$status['total']];
+        // dopad textu návrhu na občany z rozboru AI (null, dokud ho rozbor neobsahuje); do skóre nevstupuje
+        $out['dopad'] = Impact::forApi($this->repo->billText($ct)['ai'] ?? null);
         // výsledek písemných pozměňovacích návrhů ve 3. čtení (prázdné, dokud není souhrn PN a hlasování)
         $out['vysledky_pn'] = array_values(array_map(fn(array $r) => [
             'cislo' => (int)$r['cislo'], 'pismena' => array_values(array_filter(array_map('trim', explode(',', (string)$r['pismena'])))),
