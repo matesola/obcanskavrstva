@@ -100,8 +100,9 @@ export default async function BillPage({ params }: Props) {
   if (!b) notFound();
 
   const v = view(b, b);
-  const sit = resolved(b.ct, b) ?? situace(b.ct);
   const local = situace(b.ct);
+  const sit = local?.skryto ? null : resolved(b.ct, b) ?? local;
+  const checked = (local as { kontrola?: string } | null)?.kontrola ?? null;
   const d = b.dopad ?? null;
   const cmp = (local as { srovnani?: { dnes: string; navrh: string; zdroj: string } } | null)?.srovnani;
   const reasons = [...b.duvody].filter((r) => r.body > 0).sort((x, y) => y.body - x.body).slice(0, 2);
@@ -117,7 +118,14 @@ export default async function BillPage({ params }: Props) {
       <div className="nowbox">
         <p className={`status status-${v.status.kind}`}>{v.status.label}</p>
         <p><b>Musím něco udělat?</b> {v.status.act}</p>
-        <p className="small">Účinnost: {v.ucinnost ? `podle návrhu ${v.ucinnost}` : "zatím neznámá"}.</p>
+        <p className="small">
+          <b>Účinnost:</b>{" "}
+          {v.ucinnost
+            ? v.status.kind === "vyhlaseno"
+              ? `původní návrh počítal s ${v.ucinnost}; schválená verze se mohla změnit, ověřte v e-Sbírce.`
+              : `navrhovaná ${v.ucinnost}. Jen návrh, Sněmovna ji může změnit.`
+            : v.status.kind === "vyhlaseno" ? "tu zatím nemáme (e-Sbírka nemá otevřené napojení), ověřte v e-Sbírce." : "zatím ji neznáme."}
+        </p>
         {v.stale && <p className="stale">{v.stale}</p>}
       </div>
 
@@ -153,11 +161,12 @@ export default async function BillPage({ params }: Props) {
           )}
           {v.roles.length > 0 && (
             <p className="small">
-              Zařazeno do rolí: {v.roles.map((r) => `${ROLE_LABEL[r.key]} (${r.why})`).join("; ")}. Role určujeme automaticky podle slov v textu, jde o hrubé třídění.
+              Zařazeno do rolí: {v.roles.map((r) => `${ROLE_LABEL[r.key]} (${r.why})`).join("; ")}.{" "}
+              {local?.role ? "Role jsme u tohoto návrhu ručně ověřili." : "Role určujeme automaticky podle slov v názvu a vysvětlení, jde o hrubé třídění."}
             </p>
           )}
           {(v.pomuze.length > 0 || v.pritizi.length > 0) && (
-            <p className="small">Pomůže a přitíží popisuje přímé dopady textu (peníze, povinnosti, práva), ne hodnocení, zda je zákon dobrý. Shrnuto z rozboru textu a pozměňovacích návrhů na Hlídači zákonů.</p>
+            <p className="small">Pomůže a přitíží popisuje přímé dopady textu (peníze, povinnosti, práva), ne hodnocení, zda je zákon dobrý. Shrnuto z rozboru textu a pozměňovacích návrhů na Hlídači zákonů. {checked ? `Úroveň C (výklad), ${checked.charAt(0).toLowerCase()}${checked.slice(1)}` : ""}</p>
           )}
         </section>
       )}
@@ -174,7 +183,16 @@ export default async function BillPage({ params }: Props) {
       {sit && sit.nejhorsi.length > 0 && (
         <section className="block">
           <h2>V nejhorším případě</h2>
-          <p className="small">Teoretický scénář: co nejpřísnější čtení textu dovolí. Není to předpověď ani běžný očekávaný výsledek.</p>
+          <p className="small">
+            Teoretický scénář: co nejpřísnější čtení jednoho ustanovení dovolí. Není to předpověď ani očekávaný výsledek.
+            Ustanovení čteme samostatně; jiná část zákona, judikatura nebo prováděcí předpis ho mohou zmírnit.
+          </p>
+          <p className="integrity">
+            <span title="Citace existuje v textu a denně ji kontrolujeme">A · citace ověřena</span>
+            <span title="Kontext ustanovení jsme přečetli v rozboru Hlídače">B · kontext z rozboru</span>
+            <span title="Scénář je náš výklad, ne fakt">C · výklad Občanské vrstvy</span>
+            <span title="Kdy jsme to naposledy ručně kontrolovali">D · {checked ? checked.replace(/^.*?(\d+\. \d+\. \d{4}).*$/, "zkontrolováno $1") : "neověřeno"}</span>
+          </p>
           {sit.nejhorsi.map((w) => (
             <div key={w.titulek} className="worst">
               <span className="cond">{w.podminka}</span>

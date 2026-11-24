@@ -6,7 +6,10 @@ import { covered } from "./situace";
 export async function loadAll(): Promise<{ views: BillView[]; aktualizovano: string }> {
   const data = await bills();
   if (!data) throw new Error("Hlídač zákonů nevrátil seznam tisků");
+  // ochrana proti změně schématu API: raději chyba (zůstane poslední dobrá verze stránky) než tiché nesmysly
   const all = data.tisky;
+  const bad = !Array.isArray(all) || all.length < 20 || all.some((b) => typeof b.ct !== "number" || typeof b.faze !== "string" || typeof b.nazev !== "string" || !Array.isArray(b.duvody));
+  if (bad) throw new Error("Hlídač zákonů vrátil data v nečekaném tvaru");
   // detail jen u tisků s podklady nebo se závažným postupem (výsledky PN, dopad z Hlídače); cache 15 min
   const want = new Set([...covered(), ...all.filter((b) => b.uroven === "major").map((b) => b.ct)]);
   const details = new Map<number, BillDetail | null>(

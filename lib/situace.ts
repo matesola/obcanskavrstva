@@ -8,7 +8,7 @@ import type { BillDetail, PnResult } from "./api";
 
 export type Who = { kdo: string; jak: string; zdroj: string };
 export type Worst = { titulek: string; pribeh: string; podminka: string; pojistka: string; citace: string[]; zdroj: string };
-export type Situation = { faze?: string; zbystrit?: string; ucinnost?: string; srovnani?: { dnes: string; navrh: string; zdroj: string }; pomuze?: Who[]; pritizi?: Who[]; koho: Who[]; nejhorsi: Worst[] };
+export type Situation = { faze?: string; zbystrit?: string; ucinnost?: string; role?: string[]; dopad?: string; uzka?: string; kontrola?: string; skryto?: string; srovnani?: { dnes: string; navrh: string; zdroj: string }; pomuze?: Who[]; pritizi?: Who[]; koho: Who[]; nejhorsi: Worst[] };
 
 const all = (data as unknown as { tisky: Record<string, Situation> }).tisky;
 
@@ -64,14 +64,16 @@ export function resolved(ct: number, detail?: BillDetail | null): Situation | nu
     };
   }
   const local = situace(ct);
-  if (!local) return null;
+  if (!local || local.skryto) return null;
   const results = detail?.vysledky_pn ?? [];
-  if (results.length === 0) return local;
+  // po 3. čtení už je o PN rozhodnuto; když výsledek pořád neznáme, podmíněnou položku raději nezobrazíme
+  const decided = detail ? !["Podáno", "Organizační výbor", "U vlády", "Stanovisko vlády", "1. čtení", "2. čtení", "3. čtení"].includes(detail.faze) : false;
+  if (results.length === 0 && !decided) return local;
 
   // 2) podmínky pozměňovacích návrhů podle výsledků hlasování
   const people = (list: Who[] = []) => list.flatMap((k) => {
     const v = verdict(pnNumbers(k.zdroj), results);
-    if (v === "dead") return [];
+    if (v === "dead" || (v === "pending" && decided && pnNumbers(k.zdroj).length > 0)) return [];
     if (v === "passed") return [{ ...k, zdroj: k.zdroj.replace(/, (jen pokud projd(?:e|ou)|výsledek zatím nelze určit)$/, ", prošlo") }];
     if (v === "partly") return [{ ...k, zdroj: k.zdroj.replace(/, (jen pokud projd(?:e|ou)|výsledek zatím nelze určit)$/, ", prošlo zčásti") }];
     return [k];
@@ -81,7 +83,7 @@ export function resolved(ct: number, detail?: BillDetail | null): Situation | nu
   const pritizi = people(local.pritizi);
   const nejhorsi = local.nejhorsi.flatMap((w) => {
     const v = verdict(pnNumbers(w.zdroj), results);
-    if (v === "dead") return [];
+    if (v === "dead" || (v === "pending" && decided && pnNumbers(w.zdroj).length > 0)) return [];
     if (v === "passed") return [{ ...w, podminka: `Pozměňovací návrh ${w.zdroj.replace(/^PN /, "")} prošel` }];
     if (v === "partly") return [{ ...w, podminka: `Pozměňovací návrh ${w.zdroj.replace(/^PN /, "")} prošel zčásti` }];
     return [w];

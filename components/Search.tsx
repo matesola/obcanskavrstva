@@ -35,7 +35,7 @@ export default function Search({ items }: { items: SearchItem[] }) {
           <ul className="list">
             {results.slice(0, 40).map((r) => (
               <li key={r.ct}>
-                <Link prefetch={false} href={`/tisk/${r.ct}`}><strong>{r.title}</strong><span>{r.meta}</span></Link>
+                <Link prefetch={false} href={`/tisk/${r.ct}`}><strong>{r.title}</strong><span>{r.meta}</span><span className="list-note">{r.where}</span></Link>
               </li>
             ))}
           </ul>

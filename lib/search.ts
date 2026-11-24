@@ -1,7 +1,17 @@
 // Hledání lidskou řečí: bez diakritiky, podle kmene slova (důchody → důchod), s občanskými synonymy
 // (televize → poplatky, rozhlas; psi → zvířata). Jednoduché a předvídatelné, žádné AI.
 
-export type SearchItem = { ct: number; title: string; meta: string; text: string; boost?: number };
+/**
+ * Pole s váhou: přímá tematická shoda (titulek, název zákona) > role > dopad (pomůže/přitíží, koho se týká)
+ * > pouhá zmínka v shrnutí. U výsledku ukazujeme, kde se našel.
+ */
+export type SearchField = "titulek" | "zakon" | "role" | "dopad" | "shrnuti";
+export type SearchItem = { ct: number; title: string; meta: string; fields: Partial<Record<SearchField, string>>; boost?: number };
+export type SearchHit = SearchItem & { where: string };
+
+const WEIGHT: Record<SearchField, number> = { titulek: 12, zakon: 10, role: 7, dopad: 5, shrnuti: 2 };
+const WHERE: Record<SearchField, string> = { titulek: "v titulku", zakon: "v názvu zákona", role: "u role", dopad: "v dopadech", shrnuti: "ve shrnutí" };
+const ORDER: SearchField[] = ["titulek", "zakon", "role", "dopad", "shrnuti"];
 
 export const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 
@@ -39,7 +49,7 @@ function expansions(token: string): string[] {
 const STOP = new Set(["za", "na", "pro", "se", "do", "od", "po", "ve", "ze", "jak", "co", "kdy", "zakon", "zakony", "novela"]);
 
 /** Výsledky seřazené podle shody; u víceslovného dotazu stačí, když sedí aspoň polovina slov. */
-export function search(items: SearchItem[], q: string): SearchItem[] {
+export function search(items: SearchItem[], q: string): SearchHit[] {
   const tokens = norm(q).split(/[^a-z0-9-]+/).filter((t) => t.length >= 2 && !STOP.has(t));
   if (tokens.length === 0) return [];
   const exp = tokens.map(expansions);
@@ -48,18 +58,22 @@ export function search(items: SearchItem[], q: string): SearchItem[] {
   return strict.length > 0 ? strict : rank(items, exp, Math.ceil(tokens.length / 2));
 }
 
-function rank(items: SearchItem[], exp: string[][], need: number): SearchItem[] {
-  const scored: { it: SearchItem; s: number }[] = [];
+function rank(items: SearchItem[], exp: string[][], need: number): SearchHit[] {
+  const scored: { it: SearchHit; s: number }[] = [];
   for (const it of items) {
-    const hay = norm(`${it.title} ${it.text}`);
-    const title = norm(it.title);
+    const hay = Object.fromEntries(ORDER.map((f) => [f, norm(it.fields[f] ?? "")])) as Record<SearchField, string>;
     let matched = 0;
     let s = 0;
+    const found = new Set<SearchField>();
     for (const e of exp) {
-      const hit = e.filter((x) => hay.includes(x)).length;
-      if (hit > 0) { matched++; s += hit + (e.some((x) => title.includes(x)) ? 2 : 0); }
+      // každé slovo dotazu se počítá jen v nejsilnějším poli, kde se našlo
+      const f = ORDER.find((k) => e.some((x) => hay[k].includes(x)));
+      if (f) { matched++; s += WEIGHT[f]; found.add(f); }
     }
-    if (matched >= need) scored.push({ it, s: s + matched * 10 + (it.boost ?? 0) });
+    if (matched >= need) {
+      const best = ORDER.filter((f) => found.has(f)).slice(0, 2).map((f) => WHERE[f]).join(" a ");
+      scored.push({ it: { ...it, where: `Nalezeno ${best}` }, s: s + matched * 10 + (it.boost ?? 0) });
+    }
   }
   return scored.sort((a, b) => b.s - a.s).map((x) => x.it);
 }

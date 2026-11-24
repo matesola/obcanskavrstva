@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write # jen pro zápis „skryto“ do data/situace.json ve vlastním repu
 
 jobs:
   podklady:
@@ -19,7 +19,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: node scripts/check-situace.mjs | tee vysledek.txt
+      # --write: vysvětlení se změněným textem nebo zmizelou citací se na webu skryje (radši nic než zastaralý výklad)
+      - run: node scripts/check-situace.mjs --write | tee vysledek.txt; exit ${PIPESTATUS[0]}
+        shell: bash
+      - name: Uložit skrytá vysvětlení
+        if: always()
+        run: |
+          if ! git diff --quiet data/situace.json; then
+            git config user.name "synchro" && git config user.email "synchro@users.noreply.github.com"
+            git commit -am "Synchro: skrýt vysvětlení, která mohou být zastaralá" && git push
+          fi
       - if: always()
         run: |
           echo '## Podklady vs. Hlídač zákonů' >> "$GITHUB_STEP_SUMMARY"

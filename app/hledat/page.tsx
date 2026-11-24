@@ -14,9 +14,15 @@ export default async function Hledat() {
     .map((v) => ({
       ct: v.ct,
       title: v.title,
-      meta: `${v.status.label}${v.roles.length ? ` · týká se: ${v.roles.map((r) => ROLE_LABEL[r.key].toLowerCase()).join(", ")}` : ""}`,
-      boost: v.coverage === "plne" ? 6 : 0,
-      text: [v.law, v.summary ?? "", v.extra, ...v.pomuze.map((w) => `${w.kdo} ${w.jak}`), ...v.pritizi.map((w) => `${w.kdo} ${w.jak}`), ...v.roles.map((r) => ROLE_LABEL[r.key])].join(" "),
+      meta: `Tisk ${v.ct} · ${v.status.label}${v.roles.length ? ` · týká se: ${v.roles.map((r) => ROLE_LABEL[r.key].toLowerCase()).join(", ")}` : ""}`,
+      boost: v.coverage === "plne" ? 3 : 0,
+      fields: {
+        titulek: v.title,
+        zakon: v.law,
+        role: v.roles.map((r) => ROLE_LABEL[r.key]).join(" "),
+        dopad: [v.extra, ...v.pomuze.map((w) => `${w.kdo} ${w.jak}`), ...v.pritizi.map((w) => `${w.kdo} ${w.jak}`)].join(" "),
+        shrnuti: v.summary ?? "",
+      },
     }));
   return (
     <section className="hero hero-small">

@@ -2,8 +2,11 @@
 //  1. každá citace v data/situace.json je doslovně v detailu tisku na cosepece.cz,
 //  2. fáze tisku se od sepsání podkladů nezměnila (jinak je potřeba podklady projít),
 //  3. každý tisk se stupněm Závažné má podklady, nebo je má přímo Hlídač (dopad.scenare),
-//  4. výsledky pozměňovacích návrhů, na kterých podklady stojí (jen informace, web je vyhodnocuje sám).
-// Chyba v bodech 1 až 3 = exit 1 (GitHub pošle e-mail o neúspěšném běhu).
+//  4. výsledky pozměňovacích návrhů, na kterých podklady stojí (jen informace, web je vyhodnocuje sám),
+//  5. text návrhu se od ruční kontroly nezměnil (Historie textu na cosepece.cz, revize.php),
+//     i když se fáze nezměnila. Při změně textu nebo zmizelé citaci je vysvětlení možná zastaralé.
+// Chyba = exit 1 (GitHub pošle e-mail). S přepínačem --write navíc zapíše do situace.json „skryto“
+// (web takové vysvětlení nezobrazí, dokud ho člověk znovu neprojde a „skryto“ nesmaže).
 import fs from "node:fs";
 
 const API = process.env.COSEPECE_API ?? "https://cosepece.cz/api.php";
@@ -13,13 +16,29 @@ const norm = (s) => s.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/
 const json = async (q) => (await fetch(`${API}${q}`)).json();
 const problems = [];
 const info = [];
+const hide = new Map(); // ct -> důvod
+const WRITE = process.argv.includes("--write");
+const checkedAt = data.stav_k; // datum poslední ruční kontroly (YYYY-MM-DD)
+const czDate = (s) => { const m = s.match(/(\d+)\. (\d+)\. (\d{4})/); return m ? `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}` : null; };
 
 for (const [ct, t] of Object.entries(data.tisky)) {
   const html = norm(await (await fetch(`https://cosepece.cz/tisk.php?ct=${ct}`)).text());
   for (const n of t.nejhorsi) {
     for (const q of n.citace) {
-      if (!html.includes(norm(q).replace(/[.…]$/, ""))) problems.push(`tisk ${ct}: citace už v textu není: „${q.slice(0, 80)}“`);
+      if (!html.includes(norm(q).replace(/[.…]$/, ""))) {
+        problems.push(`tisk ${ct}: citace už v textu není: „${q.slice(0, 80)}“`);
+        hide.set(ct, "citace, o kterou se opírá, už v textu návrhu není. Čeká na novou kontrolu.");
+      }
     }
+  }
+  // verze textu: tabulka „Verze textu“ na revize.php, sloupec Uloženo
+  const rev = await (await fetch(`https://cosepece.cz/revize.php?druh=tisk&id=${ct}`)).text().catch(() => "");
+  const textPart = rev.split(/Rozbory AI/)[0];
+  const saved = [...textPart.matchAll(/<td[^>]*>\s*(\d+\. \d+\. \d{4}),/g)].map((m) => czDate(m[1])).filter(Boolean).sort();
+  const last = saved.at(-1);
+  if (last && checkedAt && last > checkedAt) {
+    problems.push(`tisk ${ct}: nová verze textu návrhu z ${last}, vysvětlení kontrolováno k ${checkedAt}`);
+    hide.set(ct, `text návrhu se změnil (${last.split("-").reverse().map(Number).join(". ")}), vysvětlení čeká na novou kontrolu.`);
   }
   const detail = (await json(`?tisk=${ct}`)).tisk;
   if (!detail) { problems.push(`tisk ${ct}: Hlídač ho nevrací`); continue; }
@@ -38,6 +57,12 @@ for (const b of list.filter((x) => x.uroven === "major" && !data.tisky[String(x.
   if ((detail?.dopad?.scenare ?? []).length === 0 && detail?.rozbor_textu?.posouzeno > 0) {
     problems.push(`tisk ${b.ct} (${b.nazev}): nově Závažné, chybí podklady Koho a V nejhorším případě`);
   }
+}
+
+if (WRITE && hide.size) {
+  for (const [ct, why] of hide) if (!data.tisky[ct].skryto) data.tisky[ct].skryto = why;
+  fs.writeFileSync(new URL("../data/situace.json", import.meta.url), JSON.stringify(data, null, 2) + "\n");
+  console.log(`Skryto ${hide.size} vysvětlení (zapsáno do data/situace.json).`);
 }
 
 for (const l of info) console.log("INFO ", l);

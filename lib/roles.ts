@@ -5,39 +5,53 @@
 
 export type RoleKey =
   | "zamestnanec" | "firma" | "osvc" | "rodic" | "student" | "duchodce" | "bydleni"
-  | "ridic" | "zvirata" | "spotrebitel" | "sporeni" | "zdravi" | "dluhy" | "dane" | "davky" | "volic";
+  | "ridic" | "zvirata" | "spotrebitel" | "sporeni" | "zdravi" | "dluhy" | "dane" | "davky" | "volic" | "vsichni";
 
-export const ROLES: { key: RoleKey; label: string; rules: RegExp[] }[] = [
-  { key: "zamestnanec", label: "Zaměstnanec", rules: [/zákoník(?:u)? práce/, /zaměstnan(?:ec|ci|ce|cům|ců)\b/, /\bmzd/, /odměňován/, /nemocensk/, /pracovněprávn/, /platformov/, /agentur(?:a|y|ám) práce/, /\bvýpověď/, /zaměstnanost/, /pojistném na sociální zabezpečení/, /prodejní dob/, /svátc/] },
-  { key: "firma", label: "Zaměstnavatel a firma", rules: [/zaměstnavatel/, /\bfirm/, /obchodní(?:ch)? korporac/, /účetnictví/, /veřejných zakáz|veřejné zakáz/, /kotovan/, /výrobc/, /prodejc/, /dovozc/, /obchodní(?:ho)? tajemství/, /akcionář/, /evidenci tržeb/, /sociálním podnik/] },
+/**
+ * rules: platí pro všechny zdroje (vysvětlení, název, rozbor); explainOnly: jen pro občanské vysvětlení,
+ * protože v úředním názvu jde často jen o zmínku (např. „zaměstnavatel“ v názvu zákona o veřejném zdraví);
+ * not: výluky proti falešným shodám (audit 2.1).
+ */
+type Role = { key: RoleKey; label: string; rules: RegExp[]; explainOnly?: RegExp[]; not?: RegExp[]; hidden?: boolean };
+
+export const ROLES: Role[] = [
+  { key: "zamestnanec", label: "Zaměstnanec", rules: [/zákoník(?:u)? práce/, /\bmzd/, /odměňován/, /nemocensk/, /pracovněprávn/, /platformov/, /agentur(?:a|y|ám) práce/, /\bvýpověď/, /zákon(?:a|u)? o zaměstnanosti/, /pojistném na sociální zabezpečení/, /prodejní dob/],
+    explainOnly: [/zaměstnan(?:ec|ci|ce|cům|ců)\b/], not: [/státních zaměstnanc/] },
+  { key: "firma", label: "Zaměstnavatel a podnikatel", rules: [/obchodní(?:ch)? korporac/, /veřejných zakáz|veřejné zakáz/, /evidenci tržeb/, /obchodní(?:ho)? tajemství/],
+    explainOnly: [/zaměstnavatel/, /\bfirm/, /prodejc/, /podnikatel/, /\búčetnictví/] },
   { key: "osvc", label: "OSVČ a živnostník", rules: [/(?:^|[^a-zá-ž])osvč/, /živnost/, /samostatně výdělečn/, /paušáln/, /pojistném na sociální zabezpečení/, /evidenci tržeb/] },
-  { key: "rodic", label: "Rodič", rules: [/\bdět(?:i|í|em|mi)\b/, /\bdítě/, /rodin(?:a|y|ám|né)\b/, /mateřsk/, /rodičovsk/, /výživn/, /sociálně-právní ochran/, /školsk/, /\bžák/, /mládež/] },
-  { key: "student", label: "Student", rules: [/student/, /vysok(?:é|ých|ými|ou) škol/, /\bžák/, /vzdělávání/, /studi(?:um|a)\b/] },
-  { key: "duchodce", label: "Důchodce", rules: [/důchod/, /senior/, /starobní/] },
+  { key: "rodic", label: "Rodič", rules: [/\bdítě/, /rodičovsk/, /výživn/, /sociálně-právní ochran/, /školsk/, /\bžák/, /mládež/],
+    explainOnly: [/\bdět(?:i|í|em|mi)\b/, /rodin(?:a|y|ám|né)\b/, /mateřsk/] },
+  { key: "student", label: "Student", rules: [/student/, /vysok(?:é|ých|ými|ou) škol/, /vzdělávání/, /\bžák/] },
+  { key: "duchodce", label: "Důchodce", rules: [/důchod/, /senior/, /starobní/], explainOnly: [] },
   { key: "bydleni", label: "Nájemník a majitel bytu", rules: [/nájem/, /bydlení/, /\bbyt(?:u|y|ů)?\b/, /nemovit/, /stavební zákon/] },
-  { key: "ridic", label: "Řidič", rules: [/silničním provozu/, /řidičsk/, /vozid/, /pozemních komunikac/, /pohonn/, /dálnič/] },
-  { key: "zvirata", label: "Chovatel zvířat", rules: [/zvíř/, /\bps(?:i|ů|a|em)\b/, /kočk/, /myslivo/, /chovatel/, /týrání/] },
-  { key: "spotrebitel", label: "Spotřebitel", rules: [/spotřebitel/, /reklam/, /opravou výrobku|oprav(?:ovat|a) výrobk/, /e-shop/, /spotřebitelsk/, /televizních poplatc|rozhlasových a televizních/, /poplatk(?:y|ů) za televizi/, /energetick/, /prodejní dob/, /požadavcích na výrobky/, /spotřebitelském úvěru/] },
-  { key: "sporeni", label: "Střadatel a investor", rules: [/penzijn/, /\bspoření/, /dluhopis/, /kapitálovém trhu/, /krypto/, /investi/] },
-  { key: "zdravi", label: "Pacient a pečující", rules: [/zdravot/, /pacient/, /léči|\bléky|léčiv/, /nemocnic/, /pečující|péče o/, /sociálních služb/, /návykov/] },
-  { key: "dluhy", label: "Dlužník", rules: [/exeku/, /\bdluh|dlužník|dluží/, /nedoplat/, /insolven/] },
-  { key: "dane", label: "Daňový poplatník", rules: [/\bdaň|\bdaně|daní\b|daňov/, /\bdph\b|přidané hodnoty/, /poplatník/, /\bdani\b/] },
-  { key: "davky", label: "Příjemce dávek", rules: [/státní sociální podpo/, /dávk/, /existenčním minimu/, /sociální pomoc/, /podpor(?:a|y|u) v nezaměstnanosti/] },
+  { key: "ridic", label: "Řidič", rules: [/silničním provozu/, /řidičsk/, /provozu vozidel/, /pozemních komunikac/, /pohonn/, /dálnič/] },
+  { key: "zvirata", label: "Chovatel zvířat", rules: [/zvíř/, /\bps(?:i|ů|a|em)\b/, /kočk/, /myslivo/, /chovatel/] },
+  { key: "spotrebitel", label: "Spotřebitel", rules: [/spotřebitel/, /opravou výrobku|oprav(?:ovat|a) výrobk/, /e-shop/, /finančních službách uzavíranými na dálku/, /prodejní dob/],
+    explainOnly: [/reklam/] },
+  { key: "sporeni", label: "Střadatel a investor", rules: [/penzijn/, /\bspoření/, /dluhopis/, /krypto/, /investiční(?:ch)? (?:společnost|fond)/] },
+  { key: "zdravi", label: "Pacient a pečující", rules: [/pacient/, /léči|\bléky|léčiv/, /pečující|péče o/, /sociálních služb/, /elektronizaci zdravotnictví/, /veřejné zdravotní pojištění/],
+    explainOnly: [/zdravot/, /nemocnic/], not: [/výkonu zdravotnického povolání/] },
+  { key: "dluhy", label: "Dlužník", rules: [/exeku/, /\bdluh(?!opis)|dlužník|dluží/, /nedoplat/, /insolven/] },
+  { key: "dane", label: "Daňový poplatník", rules: [/\bdaň\b|\bdaně|\bdaní(?:ch)?\b|\bdani\b/, /\bdph\b|přidané hodnoty/, /poplatník/, /spotřebních daních/],
+    explainOnly: [/daňov/], not: [/rozpočtovém určení/, /daňové mlčenlivost/] },
+  { key: "davky", label: "Příjemce dávek", rules: [/státní sociální podpo/, /\bdávk/, /existenčním minimu/, /sociální pomoc/, /podpor(?:a|y|u) v nezaměstnanosti/] },
   { key: "volic", label: "Volič", rules: [/\bvoleb\b|volbách|volební/] },
+  // změny, které dopadnou prakticky na každého: při filtrování se ukážou u každé role
+  { key: "vsichni", label: "Všichni", hidden: true, rules: [/cestovních doklad/, /státních svátc/, /rozhlasových a televizních poplatc/, /poplatk(?:y|ů) za televizi/] },
 ];
 
 // \b v JS nezná českou diakritiku („dětí “ by neprošlo), proto ho nahradíme hranicí slova s písmeny á až ž
 const L = "a-zá-ž0-9";
+const fix = (r: RegExp) => new RegExp(r.source.replace(/(^|\(\?:|\(|\|)\\b/g, `$1(?<![${L}])`).replace(/\\b/g, `(?![${L}])`), "i");
 for (const role of ROLES) {
-  role.rules = role.rules.map((r) => new RegExp(
-    r.source
-      .replace(/(^|\(\?:|\(|\|)\\b/g, `$1(?<![${L}])`)
-      .replace(/\\b/g, `(?![${L}])`),
-    "i",
-  ));
+  role.rules = role.rules.map(fix);
+  role.explainOnly = (role.explainOnly ?? []).map(fix);
+  role.not = (role.not ?? []).map(fix);
 }
 
 export const ROLE_LABEL: Record<RoleKey, string> = Object.fromEntries(ROLES.map((r) => [r.key, r.label])) as Record<RoleKey, string>;
+export const VISIBLE_ROLES = ROLES.filter((r) => !r.hidden);
 
 export type RoleHit = { key: RoleKey; why: string };
 
@@ -47,7 +61,9 @@ export function classify(sources: { label: string; text: string }[]): RoleHit[] 
   for (const role of ROLES) {
     for (const src of sources) {
       const t = src.text.toLowerCase();
-      const rule = role.rules.find((r) => r.test(t));
+      if (role.not?.some((r) => r.test(t))) continue;
+      const rules = src.label === "vysvětlení" ? [...role.rules, ...(role.explainOnly ?? [])] : role.rules;
+      const rule = rules.find((r) => r.test(t));
       if (rule) {
         hits.push({ key: role.key, why: `${src.label}: „${wordAround(src.text, t.search(rule), (t.match(rule)?.[0] ?? "").length)}“` });
         break;

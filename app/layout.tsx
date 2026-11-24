@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <p>
             Data: <a href="https://cosepece.cz/">Hlídač zákonů</a> (cosepece.cz) z otevřených dat Poslanecké sněmovny a Úřadu vlády.
             Shrnutí připravuje umělá inteligence a může se mýlit; každé tvrzení má citaci, rozhoduje text zákona.
-            Nejde o právní radu.
+            Nejde o právní radu. <a href="/metodika">Jak to děláme</a>
           </p>
           <p>
             <a href="https://github.com/matesola/obcanskavrstva">Zdrojový kód</a> · <a href="https://matesola.com/">Matesola</a>
