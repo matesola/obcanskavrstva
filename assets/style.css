@@ -319,3 +319,12 @@ table.vote-clubs td:not(:first-child), table.vote-clubs th:not(:first-child) { t
 .token-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .token-row code { font-size: 14px; padding: 8px 10px; background: #fff; border: 1px solid var(--line); word-break: break-all; }
 .token-error { padding: 10px 12px; border-left: 3px solid #B91C1C; background: #FDF2F2; border-radius: 0; }
+
+/* dopad na občany (View::impact) */
+.impact { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line); }
+.impact h4 { font-size: 14px; margin: 12px 0 4px; }
+.impact-list { margin: 0; padding-left: 18px; }
+.impact-list li { margin: 6px 0; }
+.impact-quote summary { cursor: pointer; color: var(--accent); font-size: 13px; display: inline-block; margin-top: 2px; }
+.impact-quote .quote { margin-top: 6px; }
+.impact-when { margin: 8px 0; }

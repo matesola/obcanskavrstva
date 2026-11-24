@@ -333,7 +333,7 @@ check('dopad: skupiny jen z číselníku, bez duplicit', $norm['skupiny'], ['pri
 check('dopad: položka bez citace se zahodí', count($norm['povinnosti']), 1);
 check('dopad: nesmyslný seznam je prázdný', $norm['sankce'], []);
 check('dopad: úklid je idempotentní', Hlidac\Impact::normalize($norm), $norm);
-check('dopad: prázdný dopad nic nezobrazí', Hlidac\Impact::hasContent(Hlidac\Impact::normalize([])), false);
+check('dopad: prázdný dopad nic nezobrazí', [Hlidac\Impact::hasContent(Hlidac\Impact::normalize([])), Hlidac\View::impact(['dopad' => []])], [false, '']);
 check('dopad: starý rozbor bez dopadu ho nedostane', array_key_exists('dopad', Hlidac\AiReviewer::sanitize(['zavaznost' => 3, 'titulek' => 'x'])), false);
 check('dopad: formát odpovědi ho po modelu chce', str_contains(Hlidac\AiReviewer::format(), '"dopad": {"skupiny"') && str_contains(Hlidac\AiReviewer::format(), 'drzitele_zbrani'), true);
 $keep221 = db()->one('SELECT ai_json, ai_score, ai_at, ai_model, ai_prompt, ai_runs, ai_run_count, ai_prev_json, ai_prev_score, ai_prev_model FROM tisk_text WHERE ct = 221');
@@ -343,9 +343,19 @@ $stored = json_decode((string)db()->value('SELECT ai_json FROM tisk_text WHERE c
 check('dopad: neověřené citace z rozboru vyřazeny', [$stored['dopad']['ucinnost'], count($stored['dopad']['rizika']), count($stored['dopad']['povinnosti'])], [null, 1, 1]);
 check('dopad: vyřazení je zapsané v korekcích', in_array('z dopadu vyřazeny položky bez citace ověřené v textu (5)', $stored['upravy'] ?? [], true), true);
 check('dopad: do závažnosti nevstupuje', (int)db()->value('SELECT ai_score FROM tisk_text WHERE ct = 221'), 8);
+$_GET = ['ct' => '221'];
+ob_start();
+(function (string $file): void {
+    require $file;
+})(APP_ROOT . '/tisk.php');
+$htmlImpact = (string)ob_get_clean();
 check('dopad: pomůže s citací, přitíží bez citace vyřazeno, proč zbystřit', [count($stored['dopad']['pomuze']), count($stored['dopad']['pritizi']), $stored['dopad']['zbystrit']],
     [1, 0, 'Lhůta pro vymáhání dotací se zkracuje na 4 roky.']);
 check('dopad: nejhorší čtení s ověřenou citací', [count($stored['dopad']['scenare']), $stored['dopad']['scenare'][0]['kdo'] ?? null], [1, 'obec, která dotaci poskytla']);
+check('dopad: detail tisku ukazuje skupiny a rizika', str_contains($htmlImpact, 'Co to znamená pro lidi') && str_contains($htmlImpact, 'Příjemci dotací')
+    && str_contains($htmlImpact, 'Rizika a pojistky') && !str_contains($htmlImpact, 'Vymyšlené riziko')
+    && str_contains($htmlImpact, 'V nejhorším případě') && str_contains($htmlImpact, 'Úřad má na vrácení dotace jen 4 roky')
+    && str_contains($htmlImpact, 'Komu pomůže') && str_contains($htmlImpact, 'Proč zbystřit'), true);
 $apiImpact = (new Hlidac\Api(db(), new Hlidac\Repo(db()), config()))->bill(221)['dopad'] ?? null;
 check('dopad: api.php?tisk= vrací skupiny s názvy', $apiImpact['skupiny'][0] ?? null, ['klic' => 'prijemci_dotaci', 'nazev' => 'Příjemci dotací']);
 $apiObj = new Hlidac\Api(db(), new Hlidac\Repo(db()), config());
