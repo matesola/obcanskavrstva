@@ -19,9 +19,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Link href="/" className="brand">
             Občanská <mark>vrstva</mark>
           </Link>
+          <a className="credit" href="https://cosepece.cz/">nad daty Hlídače zákonů</a>
         </header>
         <main>{children}</main>
         <footer className="foot">
+          <p className="thanks">
+            Bez <a href="https://cosepece.cz/">Hlídače zákonů</a> (cosepece.cz) by tahle vrstva nevznikla. Hlídá postup, my ho překládáme do lidské řeči.
+          </p>
           <p>
             Data: <a href="https://cosepece.cz/">Hlídač zákonů</a> (cosepece.cz) z otevřených dat Poslanecké sněmovny a Úřadu vlády.
             Shrnutí připravuje umělá inteligence a může se mýlit; každé tvrzení má citaci, rozhoduje text zákona.

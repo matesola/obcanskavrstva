@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "check": "node scripts/check-situace.mjs"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",

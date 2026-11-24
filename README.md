@@ -12,6 +12,14 @@ Side projekt nad [Hlídačem zákonů](https://cosepece.cz/) ([FrantisekJanos/co
 - Filtr „Týká se mě“ si výběr pamatuje v prohlížeči (localStorage), bez účtu a e-mailu.
 - Pole `rozbor`, `dopad` a `hlavni_nalez` přidává do API PR „dopad na občany“ (větev `dopad-na-obcany` v tomto repu). Dokud ho Hlídač nenasadí, web ukazuje lidsky přepsané názvy, větu z rozboru AI a cestu zákonem; zbytek se doplní sám.
 
+## Koho se týká a nejhorší čtení
+
+U tisků se stupněm Závažné web ukazuje, koho se zákon týká (konkrétní lidé a firmy) a nejhorší čtení: co text při doslovném a nejpřísnějším výkladu umožní, s podmínkou (přímo v textu, nebo jen pokud projde pozměňovací návrh), pojistkou a citací.
+
+- Teď z ručně sestavených podkladů v `data/situace.json` (z rozborů na cosepece.cz). `npm run check` ověří, že každá citace je doslovně v detailu tisku na cosepece.cz.
+- Až Hlídač nasadí PR `dopad-na-obcany`, přijde nejhorší čtení automaticky v `dopad.scenare` pro každý tisk; ruční podklady mají dál přednost.
+- Nejhorší čtení popisuje, co text umožňuje, ne co kdo zamýšlí. Žádná čísla ani lhůty, které v textu nejsou.
+
 ## Vývoj
 
 ```bash

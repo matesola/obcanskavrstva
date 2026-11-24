@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { bill, type ImpactItem } from "@/lib/api";
 import { GROUPS, LEVEL, date, kind, perex, subtitle, title } from "@/lib/text";
 import Path from "@/components/Path";
+import { situace } from "@/lib/situace";
 
 export const revalidate = 900; // musí být literál (Next.js), shodně s REVALIDATE v lib/api.ts
 
@@ -62,6 +63,17 @@ export default async function BillPage({ params }: Props) {
   const sub = subtitle(b);
   const p = perex(b);
   const summary = b.rozbor?.shrnuti;
+  // ruční podklady (data/situace.json) mají přednost, jinak nejhorší čtení z rozboru Hlídače (dopad.scenare)
+  const local = situace(b.ct);
+  const sit = local ?? (d && (d.scenare ?? []).length > 0
+    ? {
+        koho: [],
+        nejhorsi: (d.scenare ?? []).map((x) => ({
+          titulek: x.titulek, pribeh: `${x.kdo}: ${x.pribeh}`, podminka: "Z rozboru textu na Hlídači zákonů",
+          pojistka: x.pojistka, citace: [x.citace], zdroj: "rozbor AI",
+        })),
+      }
+    : null);
   const votes = [...(b.hlasovani ?? [])].sort((x, y) => y.datum.localeCompare(x.datum)).slice(0, 5);
 
   return (
@@ -72,6 +84,49 @@ export default async function BillPage({ params }: Props) {
       <h1>{title(b)}</h1>
       {sub && <p className="official">{sub}</p>}
       {p && <p>{p}</p>}
+
+      {sit && sit.koho.length > 0 && (
+        <section className="block">
+          <h2>Koho se to týká</h2>
+          <ul className="items who">
+            {sit.koho.map((k) => (
+              <li key={k.kdo}>
+                <span className="who">{k.kdo}</span>: {k.jak}
+                <span className="guard">{k.zdroj}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {sit && sit.nejhorsi.length > 0 && (
+        <section className="block">
+          <h2>Nejhorší čtení</h2>
+          {sit.nejhorsi.map((w) => (
+            <div key={w.titulek} className="worst">
+              <span className="cond">{w.podminka}</span>
+              <h3>{w.titulek}</h3>
+              <p>{w.pribeh}</p>
+              <p className="guard-line"><b>Co tomu brání:</b> {w.pojistka}</p>
+              <details className="quote">
+                <summary>Citace ze zákona ({w.zdroj})</summary>
+                {w.citace.map((q) => <blockquote key={q}>„{q}“</blockquote>)}
+              </details>
+            </div>
+          ))}
+          <p className="small">
+            Nejhorší čtení popisuje, co text nejvýš umožňuje, ne co kdo zamýšlí. Sestaveno z rozborů Hlídače zákonů,
+            každá citace je doslovně z textu na psp.cz. Pozměňovací návrhy platí, jen když projdou.
+          </p>
+        </section>
+      )}
+
+      {!sit && b.uroven === "major" && !d && (
+        <section className="block">
+          <h2>Koho se to týká</h2>
+          <p className="empty">Zatím nevíme: text návrhu ještě nikdo nerozebral, takže by to byl odhad. Hlídač zákonů skóruje zatím jen postup.</p>
+        </section>
+      )}
 
       <section className="block">
         <h2>Kde to je</h2>

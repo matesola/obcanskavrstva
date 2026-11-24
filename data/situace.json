@@ -1,0 +1,190 @@
+{
+  "_info": "Koho se týká a nejhorší čtení u tisků se stupněm Závažné. Sestaveno z rozborů textů a pozměňovacích návrhů na cosepece.cz (AI, ověřeno citacemi). Každá citace je doslovně z detailu tisku na cosepece.cz (kontrola: scripts/check-situace.mjs). Nejhorší čtení popisuje, co text nejvýš umožňuje, ne co kdo zamýšlí.",
+  "stav_k": "2026-11-24",
+  "tisky": {
+    "311": {
+      "koho": [
+        { "kdo": "Zpracovatelé ropy a výrobci paliv", "jak": "mimořádná daň 50 % z části zisku za roky 2026 a 2027", "zdroj": "text návrhu" },
+        { "kdo": "Zemědělci zapsaní jako zemědělští podnikatelé", "jak": "nové odpočty, stabilizační rezerva a zvláštní odpisy, volitelně už za rok 2027", "zdroj": "PN Mariana Jurečky (E1 až E7), jen pokud projdou" },
+        { "kdo": "Velké skupiny firem", "jak": "nová daň z nadměrných zisků 33 % a 60 % od roku 2028", "zdroj": "PN č. 2329 (Gabriela Svárovská), jen pokud projde" },
+        { "kdo": "Uhelné elektrárny", "jak": "rozšíření mimořádné daně na výrobu elektřiny z uhlí", "zdroj": "PN č. 2300 (Vendula Svobodová), jen pokud projde" }
+      ],
+      "nejhorsi": [
+        {
+          "titulek": "Daň za rok, který už běží",
+          "pribeh": "Rafinerie plánovala rok 2026 podle tehdejších pravidel. Podle návrhu z části zisku za celý rok 2026 zaplatí daň 50 %, přestože zákon začne platit až v jeho průběhu. Rozbor navíc upozorňuje, že dvě přechodná ustanovení si v tomhle odporují, takže výsledek může záviset na výkladu.",
+          "podminka": "Přímo v textu vládního návrhu",
+          "pojistka": "Daň se týká jen úzce vymezeného okruhu poplatníků (zpracování ropy a výroba rafinovaných produktů). Zpětné použití text nijak nezmírňuje.",
+          "citace": [
+            "se použije již za zdaňovací období započaté v kalendářním roce 2026.",
+            "Sazba daně pro základ mimořádné sektorové daně činí 50 %."
+          ],
+          "zdroj": "text návrhu"
+        }
+      ]
+    },
+    "285": {
+      "koho": [
+        { "kdo": "Lidé s penzijním spořením, kteří letos vybrali část peněz (částečné odbytné)", "jak": "nová daňová pravidla se použijí zpětně od roku 2026", "zdroj": "text návrhu" },
+        { "kdo": "Zaměstnavatelé", "jak": "povinnost dorovnat zaměstnanci příspěvek na spoření až do 2 % příjmu, pokuty do 2 000 000 Kč", "zdroj": "PN č. 2181 (Hana Ančincová), jen pokud projde" },
+        { "kdo": "Zaměstnanci bez penzijního spoření", "jak": "spoření jim vznikne samo, pokud ho do 60 dnů neodmítnou (od roku 2029)", "zdroj": "PN č. 2239 (Marian Jurečka), jen pokud projde" },
+        { "kdo": "Účastníci starého penzijního připojištění mladší 50 let", "jak": "nové příspěvky se přesměrují do strategie životního cyklu, pokud do 30 dnů neodmítnou", "zdroj": "PN č. 2247 (Jiří Havránek), jen pokud projde" }
+      ],
+      "nejhorsi": [
+        {
+          "titulek": "Vybrali jste z penzijka podle starých pravidel, platíte podle nových",
+          "pribeh": "Letos jste si vybrali část naspořených peněz. Návrh spojuje částečné odbytné s vracením daňové podpory a přechodné ustanovení tuto úpravu použije už od roku 2026, tedy i na výběr, který proběhl před účinností zákona.",
+          "podminka": "Přímo v textu vládního návrhu",
+          "pojistka": "V textu návrhu neuvedena.",
+          "citace": ["se použije již od zdaňovacího období roku 2026."],
+          "zdroj": "text návrhu"
+        },
+        {
+          "titulek": "Malá firma dorovnává penzijko každému, kdo si spoří",
+          "pribeh": "Pekárna s 12 zaměstnanci. Kdo si sám přispívá na penzijní spoření nebo dlouhodobý investiční produkt, tomu musí firma ze svého přidat stejnou částku, až do 2 % jeho příjmu. Kontrolu a pokuty do 2 000 000 Kč návrh přidává také.",
+          "podminka": "Jen pokud projde pozměňovací návrh č. 2181",
+          "pojistka": "Firmy s nejvýš 10 zaměstnanci mají přechodné období do konce roku 2028.",
+          "citace": ["Zaměstnavatel je povinen ze svých prostředků platit zaměstnanci na jeho daňově podporované doplňkové penzijní spoření nebo dlouhodobý investiční produkt"],
+          "zdroj": "PN č. 2181 (Hana Ančincová)"
+        }
+      ]
+    },
+    "213": {
+      "koho": [
+        { "kdo": "Cizinci, kteří požádali o mezinárodní ochranu", "jak": "povinnost odevzdat cestovní doklad i u žádostí podaných před účinností", "zdroj": "text návrhu" },
+        { "kdo": "Cizinci s rozhodnutím o povinnosti opustit území", "jak": "nová pravidla zajištění, návratu a lhůta 10 dnů na žalobu", "zdroj": "PN č. 1989 (Hubert Lang), jen pokud projde" },
+        { "kdo": "Každý, kdo se soudí s úřady, vysoké školy a profesní komory", "jak": "rozsáhlá reforma správního soudnictví vložená do zákona o Ukrajině", "zdroj": "PN č. 2112 a 2114 (Kateřina Stojanová), jen pokud projdou" },
+        { "kdo": "Firmy, které zprostředkují práci", "jak": "nový trestný čin zastřeného zprostředkování zaměstnání, tresty až 10 let", "zdroj": "PN č. 2115 (Aleš Juchelka), jen pokud projde" }
+      ],
+      "nejhorsi": [
+        {
+          "titulek": "Na žalobu proti vyhoštění 10 dní",
+          "pribeh": "Cizinec dostane rozhodnutí, že musí opustit Česko. Pokud se chce bránit u soudu, má na podání žaloby 10 dní od doručení. Po uplynutí lhůty už žalobu podat nejde.",
+          "podminka": "Jen pokud projde pozměňovací návrh č. 1989",
+          "pojistka": "Žalobu lze podat; text upravuje jen lhůtu. Jde o adaptaci návratového nařízení EU.",
+          "citace": ["Žaloba proti rozhodnutí o povinnosti opustit území nebo území členských států Evropské unie"],
+          "zdroj": "PN č. 1989 (Hubert Lang)"
+        }
+      ]
+    },
+    "48": {
+      "koho": [
+        { "kdo": "Zemědělci hospodařící na víc než 200 ha", "jak": "každý měsíc elektronicky hlásit použití přípravků (postřiků)", "zdroj": "text návrhu" },
+        { "kdo": "Lidé v lesích a osoby v působnosti Vojenské policie", "jak": "nové přestupky podle lesního zákona, Vojenská policie je může řešit příkazem na místě", "zdroj": "PN č. 824 (David Pražák), výsledek zatím nelze určit" },
+        { "kdo": "Myslivci", "jak": "lov siky, poplatkový lov, nový systém příspěvků", "zdroj": "PN č. 871 a 877, výsledek zatím nelze určit" }
+      ],
+      "nejhorsi": [
+        {
+          "titulek": "Statek na 250 hektarech hlásí každý postřik do měsíce",
+          "pribeh": "Farmář hospodaří na 250 ha orné půdy a vinic. Záznamy o každém použití přípravků musí posílat elektronicky do konce následujícího měsíce, ve formátu, který stanoví až prováděcí předpis. Jak ten formát bude vypadat, dnes nikdo neví.",
+          "podminka": "Přímo v textu vládního návrhu",
+          "pojistka": "Jen nad 200 ha, výzkumné a pokusné plochy jsou vyňaté, platí od 1. 1. 2027 bez zpětnosti.",
+          "citace": ["jsou povinni předávat záznamy o používání přípravků nebo pomocných prostředků v elektronické podobě Ústavu také do konce měsíce následujícího po aplikaci"],
+          "zdroj": "text návrhu"
+        },
+        {
+          "titulek": "Lesní zákon v zákoně o postřicích",
+          "pribeh": "Do novely o rostlinolékařské péči se pozměňovacím návrhem dostala novela lesního zákona: nové přestupky a pravomoc Vojenské policie projednat je příkazem na místě. O lesním zákoně tak může padnout rozhodnutí bez samostatné debaty.",
+          "podminka": "Jen pokud projde pozměňovací návrh č. 824 (výsledek zatím nelze určit)",
+          "pojistka": "Vojenská policie jen u osob, na které se vztahuje její působnost, a jen při plnění svých úkolů.",
+          "citace": ["Při plnění úkolů Vojenské policie podle zákona o Vojenské policii může přestupky podle § 53 odst. 1 projednat příkazem na místě vojenský policista"],
+          "zdroj": "PN č. 824 (David Pražák)"
+        }
+      ]
+    },
+    "222": {
+      "koho": [
+        { "kdo": "Všichni, kdo kupují výrobky", "jak": "v krizi smí na trh krizové zboží bez obvyklého posouzení shody", "zdroj": "text návrhu" },
+        { "kdo": "Firmy, které soutěží o veřejné zakázky", "jak": "nová pravidla přezkumu, kauce, žaloba do 2 týdnů, bez rozkladu", "zdroj": "PN č. 2003 (Ivan Bartoš), jen pokud projde" }
+      ],
+      "nejhorsi": [
+        {
+          "titulek": "V krizi zboží bez certifikace",
+          "pribeh": "Při mimořádné situaci na vnitřním trhu (třeba výpadku dodávek) nemají zkušebny kapacitu. Úřad pak může povolit prodej krizově relevantního zboží bez posouzení shody, které je jinak povinné.",
+          "podminka": "Přímo v textu vládního návrhu",
+          "pojistka": "Jen při vyhlášené mimořádné situaci, jen když zkušebny nemají kapacitu, a jen na odůvodněnou žádost, o které rozhoduje Úřad pro technickou normalizaci.",
+          "citace": ["na základě odůvodněné žádosti povolit uvést krizově relevantní zboží na trh nebo do provozu na území České republiky bez posouzení shody"],
+          "zdroj": "text návrhu"
+        }
+      ]
+    },
+    "174": {
+      "koho": [
+        { "kdo": "Majitelé psů a koček", "jak": "zvíře, které se ztratí, může připadnout obci; vyšší pokuty", "zdroj": "text návrhu" },
+        { "kdo": "Každá domácnost", "jak": "policie smí vstoupit i do obydlí", "zdroj": "text návrhu" },
+        { "kdo": "Chovatelé koček", "jak": "povinné čipování a registrace, poplatek jako u psů", "zdroj": "PN č. 2063 (Jana Patková), jen pokud projde" },
+        { "kdo": "Obce", "jak": "kastrace a označení opuštěných koček na vlastní náklady", "zdroj": "text návrhu" }
+      ],
+      "nejhorsi": [
+        {
+          "titulek": "Pes uteče a patří obci",
+          "pribeh": "Pes vám uteče, najde ho soused a ohlásí to na úřadě. Podle textu obec nabývá ke zvířeti vlastnické právo okamžikem, kdy se o nálezu dozví. Zda má původní majitel lhůtu, kdy si zvíře může vzít zpátky, citovaný text neuvádí.",
+          "podminka": "Přímo v textu poslaneckého návrhu",
+          "pojistka": "V citovaném textu neuvedena; může být v jiném ustanovení občanského zákoníku.",
+          "citace": ["Obec nabývá ke zvířeti vlastnické právo okamžikem, kdy se o jeho nalezení dozví."],
+          "zdroj": "text návrhu"
+        },
+        {
+          "titulek": "Policie smí i do bytu",
+          "pribeh": "Novela zákona o ochraně zvířat přidává do § 40 zákona o policii jediné slovo: „obydlí“. Rozbor Hlídače to čte jako rozšíření vstupu policie do bytů a domů, mimo hlavní účel návrhu.",
+          "podminka": "Přímo v textu poslaneckého návrhu",
+          "pojistka": "Podmínky vstupu dál určuje zákon o Policii; novela je nemění.",
+          "citace": ["se za slova „vstupu do“ vkládá slovo „obydlí,“"],
+          "zdroj": "text návrhu"
+        }
+      ]
+    },
+    "115": {
+      "koho": [
+        { "kdo": "Rodiče, kteří neplatí výživné", "jak": "nová pravidla pro nepodmíněný trest", "zdroj": "text návrhu" },
+        { "kdo": "Dlužníci výživného se zbrojním průkazem", "jak": "exekutor jim může pozastavit zbrojní oprávnění", "zdroj": "PN č. 1581 (Václav Pláteník), jen pokud projde" },
+        { "kdo": "Podnikatelé s pracovníky ze zahraničí", "jak": "trestné je i umožnit práci, sazba až 3 roky; širší odposlechy", "zdroj": "PN č. 1422 (Aleš Juchelka), jen pokud projde" }
+      ],
+      "nejhorsi": [
+        {
+          "titulek": "Na stavbě pracuje cizinec bez povolení. Trestně můžete odpovídat i vy.",
+          "pribeh": "Stavební firma pustí na stavbu subdodavatele, který zaměstnává cizince bez povolení. Dnes je trestné „neoprávněně zaměstnat“. Nově i v rámci podnikání „umožnit výkon práce“, a horní hranice trestu roste ze šesti měsíců na tři roky.",
+          "podminka": "Jen pokud projde pozměňovací návrh č. 1422",
+          "pojistka": "Trestní zákoník obecně vyžaduje úmysl, pokud výslovně nestanoví jinak.",
+          "citace": ["v rámci své podnikatelské činnosti umožní výkon práce"],
+          "zdroj": "PN č. 1422 (Aleš Juchelka)"
+        },
+        {
+          "titulek": "Exekutor vám vezme zbrojní průkaz",
+          "pribeh": "Kdo dluží výživné, tomu může exekutor příkazem pozastavit zbrojní oprávnění. Zbraně a střelivo pak musí do 5 pracovních dnů uložit do úschovy nebo odevzdat policii.",
+          "podminka": "Jen pokud projde pozměňovací návrh č. 1581",
+          "pojistka": "Příkaz se ruší po zaplacení nedoplatku nebo když člověk prokáže, že zbrojní oprávnění potřebuje k výdělečné činnosti.",
+          "citace": ["Exekuční příkaz k pozastavení zbrojního oprávnění povinného může exekutor vydat za podmínek uvedených v § 71a odst. 1."],
+          "zdroj": "PN č. 1581 (Václav Pláteník)"
+        }
+      ]
+    },
+    "300": {
+      "koho": [
+        { "kdo": "Kurýři a řidiči pracující přes aplikace", "jak": "nová pravidla platformové práce", "zdroj": "text návrhu" },
+        { "kdo": "Zaměstnanci a zaměstnavatelé", "jak": "transparentnost odměňování", "zdroj": "text návrhu" },
+        { "kdo": "Kdo dluží na sociálním pojištění nebo dostal přeplatek dávky", "jak": "nové lhůty se použijí i na lhůty, které už běží", "zdroj": "text návrhu" },
+        { "kdo": "OSVČ a matky na mateřské", "jak": "nový strop nemocenského pojištění a výpočet peněžité pomoci v mateřství od 1. 7. 2027", "zdroj": "PN č. 2368 (Marian Jurečka), jen pokud projde" },
+        { "kdo": "Agentury práce", "jak": "kauce 3 000 000 Kč, jinak povolení zanikne", "zdroj": "PN č. 2384 (Marek Novák), jen pokud projde" }
+      ],
+      "nejhorsi": [
+        {
+          "titulek": "Lhůta vám běží podle jedněch pravidel, doběhne podle jiných",
+          "pribeh": "Dlužíte na sociálním pojištění z doby před účinností zákona. Lhůta, po které takový dluh zaniká, se od účinnosti posuzuje podle daňového řádu, i když začala běžet za starých pravidel. Stejně se změní lhůta pro vracení přeplatku na dávce u nároků, které už vznikly.",
+          "podminka": "Přímo v textu vládního návrhu",
+          "pojistka": "V textu návrhu neuvedena.",
+          "citace": ["a neskončila přede dnem nabytí účinnosti tohoto zákona, se ode dne nabytí účinnosti tohoto zákona posuzuje podle ustanovení zákona č. 280/2009 Sb., daňový řád"],
+          "zdroj": "text návrhu"
+        },
+        {
+          "titulek": "Agentura práce složí 3 miliony, nebo končí",
+          "pribeh": "Malá agentura práce, která má povolení léta, musí do 4 měsíců doplatit kauci 3 000 000 Kč. Pokud ne, povolení zanikne.",
+          "podminka": "Jen pokud projde pozměňovací návrh č. 2384",
+          "pojistka": "Lhůta 4 měsíce na doplacení.",
+          "citace": ["Tato právnická nebo fyzická osoba je povinna poskytnout kauci ve výši 3 000 000 Kč"],
+          "zdroj": "PN č. 2384 (Marek Novák)"
+        }
+      ]
+    }
+  }
+}

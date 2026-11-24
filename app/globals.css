@@ -108,3 +108,25 @@ a.card:active { transform: translate(1px, 1px); box-shadow: 3px 3px 0 -1.5px var
 .path-labels span, .path-labels b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .block .items li { font-size: 15px; }
 @media (max-width: 420px) { .path-labels { font-size: 10px; } }
+
+/* hlavička: kredit Hlídače */
+.top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.credit { font-size: 13px; color: var(--muted); }
+.thanks { color: var(--ink); font-weight: 600; font-size: 14px; }
+
+/* koho */
+.who-line { font-size: 14px; margin: 0 0 12px; }
+.items.who li { font-size: 16px; }
+
+/* nejhorší čtení */
+.worst-mini { background: var(--ink); color: var(--paper); border-radius: 3px; padding: 10px 12px; margin: 0 0 12px; display: grid; gap: 4px; }
+.worst-mini strong { font: 800 17px/1.2 var(--display); font-stretch: 104%; }
+.worst-label { font: 800 11px/1 var(--text); letter-spacing: 0.12em; text-transform: uppercase; color: var(--marker); }
+.cond { font-size: 12px; opacity: 0.8; }
+.worst { background: var(--ink); color: var(--paper); border-radius: 4px; padding: 16px 18px; margin: 0 0 14px; }
+.worst .cond { display: inline-block; background: var(--marker); color: var(--ink); opacity: 1; font-weight: 700; padding: 2px 8px; border-radius: 3px; }
+.worst h3 { font: 900 clamp(22px, 5.6vw, 30px)/1.1 var(--display); font-stretch: 108%; letter-spacing: -0.015em; margin: 10px 0 8px; }
+.worst p { margin: 0 0 10px; }
+.worst .guard-line { font-size: 15px; color: #d9d4c7; }
+.worst .quote summary { color: #bdb7a8; }
+.worst .quote blockquote { color: var(--ink); }
