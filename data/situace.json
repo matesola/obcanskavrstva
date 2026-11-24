@@ -1,5 +1,5 @@
 {
-  "_info": "Koho se týká a nejhorší čtení u tisků se stupněm Závažné. Sestaveno z rozborů textů a pozměňovacích návrhů na cosepece.cz (AI, ověřeno citacemi). Každá citace je doslovně z detailu tisku na cosepece.cz (kontrola: scripts/check-situace.mjs). Nejhorší čtení popisuje, co text nejvýš umožňuje, ne co kdo zamýšlí.",
+  "_info": "Koho se týká a „v nejhorším případě“ u tisků se stupněm Závažné. Sestaveno z rozborů textů a pozměňovacích návrhů na cosepece.cz (AI, ověřeno citacemi). Každá citace je doslovně z detailu tisku na cosepece.cz (kontrola: scripts/check-situace.mjs). „V nejhorším případě“ popisuje, co nejpřísnější čtení textu dovolí, ne co kdo zamýšlí.",
   "stav_k": "2026-11-24",
   "tisky": {
     "311": {

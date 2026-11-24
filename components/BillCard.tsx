@@ -29,7 +29,7 @@ export default function BillCard({ b }: { b: Bill }) {
       )}
       {worst && (
         <div className="worst-mini">
-          <span className="worst-label">Nejhorší čtení</span>
+          <span className="worst-label">V nejhorším případě</span>
           <strong>{worst.titulek}</strong>
           <span className="cond">{worst.podminka}</span>
         </div>

@@ -63,7 +63,7 @@ export default async function BillPage({ params }: Props) {
   const sub = subtitle(b);
   const p = perex(b);
   const summary = b.rozbor?.shrnuti;
-  // ruční podklady (data/situace.json) mají přednost, jinak nejhorší čtení z rozboru Hlídače (dopad.scenare)
+  // ruční podklady (data/situace.json) mají přednost, jinak „v nejhorším případě“ z rozboru Hlídače (dopad.scenare)
   const local = situace(b.ct);
   const sit = local ?? (d && (d.scenare ?? []).length > 0
     ? {
@@ -101,7 +101,7 @@ export default async function BillPage({ params }: Props) {
 
       {sit && sit.nejhorsi.length > 0 && (
         <section className="block">
-          <h2>Nejhorší čtení</h2>
+          <h2>V nejhorším případě</h2>
           {sit.nejhorsi.map((w) => (
             <div key={w.titulek} className="worst">
               <span className="cond">{w.podminka}</span>
@@ -115,7 +115,7 @@ export default async function BillPage({ params }: Props) {
             </div>
           ))}
           <p className="small">
-            Nejhorší čtení popisuje, co text nejvýš umožňuje, ne co kdo zamýšlí. Sestaveno z rozborů Hlídače zákonů,
+            Co nejpřísnější možné čtení zákona dovolí, ne předpověď, co se stane, ani co kdo zamýšlí. Sestaveno z rozborů Hlídače zákonů,
             každá citace je doslovně z textu na psp.cz. Pozměňovací návrhy platí, jen když projdou.
           </p>
         </section>

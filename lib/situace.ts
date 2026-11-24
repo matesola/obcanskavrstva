@@ -1,4 +1,4 @@
-// Koho se tisk týká a nejhorší čtení (data/situace.json, citace ověřuje scripts/check-situace.mjs).
+// Koho se tisk týká a „v nejhorším případě“ (data/situace.json, citace ověřuje scripts/check-situace.mjs).
 import data from "@/data/situace.json";
 
 export type Who = { kdo: string; jak: string; zdroj: string };

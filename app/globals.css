@@ -118,7 +118,7 @@ a.card:active { transform: translate(1px, 1px); box-shadow: 3px 3px 0 -1.5px var
 .who-line { font-size: 14px; margin: 0 0 12px; }
 .items.who li { font-size: 16px; }
 
-/* nejhorší čtení */
+/* v nejhorším případě */
 .worst-mini { background: var(--ink); color: var(--paper); border-radius: 3px; padding: 10px 12px; margin: 0 0 12px; display: grid; gap: 4px; }
 .worst-mini strong { font: 800 17px/1.2 var(--display); font-stretch: 104%; }
 .worst-label { font: 800 11px/1 var(--text); letter-spacing: 0.12em; text-transform: uppercase; color: var(--marker); }
