@@ -1,6 +1,6 @@
 # Občanská vrstva
 
-*To se nasmějete, lidové vrstvy.*
+*„To se nasmějete, lidové vrstvy.“*
 
 Co pro vás chystá Sněmovna, lidskou řečí: koho se zákon týká, odkdy platí, nové povinnosti, pravomoci a sankce a kde je háček. Každé tvrzení s citací ze zákona.
 

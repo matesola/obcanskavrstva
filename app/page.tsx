@@ -55,7 +55,7 @@ export default async function Home() {
         <h1>
           Co se na vás <mark>chystá</mark>
         </h1>
-        <p className="tag">To se nasmějete, lidové vrstvy.</p>
+        <p className="tag">„To se nasmějete, lidové vrstvy.“</p>
         <p className="dry">
           Zákony, které právě projednává Sněmovna, přeložené do lidské řeči. Koho se týkají, odkdy a kde je háček.
           Každé tvrzení s citací ze zákona.
