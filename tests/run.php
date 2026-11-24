@@ -349,7 +349,7 @@ $htmlImpact = (string)ob_get_clean();
 check('dopad: nejhorší čtení s ověřenou citací', [count($stored['dopad']['scenare']), $stored['dopad']['scenare'][0]['kdo'] ?? null], [1, 'obec, která dotaci poskytla']);
 check('dopad: detail tisku ukazuje skupiny a rizika', str_contains($htmlImpact, 'Co to znamená pro lidi') && str_contains($htmlImpact, 'Příjemci dotací')
     && str_contains($htmlImpact, 'Rizika a pojistky') && !str_contains($htmlImpact, 'Vymyšlené riziko')
-    && str_contains($htmlImpact, 'Nejhorší čtení') && str_contains($htmlImpact, 'Úřad má na vrácení dotace jen 4 roky'), true);
+    && str_contains($htmlImpact, 'V nejhorším případě') && str_contains($htmlImpact, 'Úřad má na vrácení dotace jen 4 roky'), true);
 $apiImpact = (new Hlidac\Api(db(), new Hlidac\Repo(db()), config()))->bill(221)['dopad'] ?? null;
 check('dopad: api.php?tisk= vrací skupiny s názvy', $apiImpact['skupiny'][0] ?? null, ['klic' => 'prijemci_dotaci', 'nazev' => 'Příjemci dotací']);
 $apiObj = new Hlidac\Api(db(), new Hlidac\Repo(db()), config());
