@@ -13,8 +13,9 @@ final class AiReviewer
     private const API = 'https://api.anthropic.com/v1/messages';
 
     // verze promptu a pravidel: po změně promptu ji zvyšte, fronta pak postupně znovu posoudí starší rozbory
-    // (původní výsledek zůstává zobrazený, dokud ho nový nenahradí). 2 = bez jména předkladatele a typu návrhu (#7)
-    public const PROMPT_VERSION = 2;
+    // (původní výsledek zůstává zobrazený, dokud ho nový nenahradí). 2 = bez jména předkladatele a typu návrhu (#7),
+    // 3 = navíc „dopad“ na občany (app/Impact.php), do závažnosti nevstupuje
+    public const PROMPT_VERSION = 3;
     // namátkový vzorek nízkých hodnocení pro silnější model: texty s číslem ≡ SAMPLE_REMAINDER (mod sample_every)
     public const SAMPLE_REMAINDER = 3;
 
@@ -66,13 +67,14 @@ TXT;
 
     private const FORMAT = <<<'TXT'
 Odpověz pouze JSON objektem bez dalšího textu:
-{"titulek": "…", "perex": "…", "shrnuti": "1–2 věty, co text mění", "souvisi_s_predmetem": true, "jine_zakony": ["číslo/rok"], "zpetna_ucinnost": false, "zpetnost_smer": "neni", "zkraceni_lhut": false, "prospech_uzke_skupiny": false, "zasadni_nova_uprava": false, "zavaznost": 0, "duvod": "1 věta, proč tato závažnost", "citace": ["doslovně zkopírovaná věta z textu, která zjištění dokládá"]}
+{"titulek": "…", "perex": "…", "shrnuti": "1–2 věty, co text mění", "souvisi_s_predmetem": true, "jine_zakony": ["číslo/rok"], "zpetna_ucinnost": false, "zpetnost_smer": "neni", "zkraceni_lhut": false, "prospech_uzke_skupiny": false, "zasadni_nova_uprava": false, "zavaznost": 0, "duvod": "1 věta, proč tato závažnost", "citace": ["doslovně zkopírovaná věta z textu, která zjištění dokládá"], {IMPACT_EXAMPLE}}
 "zpetnost_smer": jedna z hodnot "neni", "ve_prospech_verejnosti", "oslabuje_vymahani_nebo_kontrolu", "zvyhodnuje_uzkou_skupinu", "nova_povinnost".
 "titulek": nejdůležitější konkrétní změna srozumitelně pro běžného čtenáře, nejvýš 90 znaků, bez názvu zákona a bez čísel zákonů (např. „Lhůta pro vymáhání neoprávněných dotací se zkracuje na 4 roky – i zpětně“). Slovo „zpětně“ použij v titulku jen tehdy, když zpětnost není ve prospěch veřejnosti.
 "perex": jedna věta, nejvýš 160 znaků, proč je postup procedurálně sporný (např. zpětné použití, přílepek, zkrácení lhůty). Pokud nic sporného není, popiš věcně hlavní změnu.
 Pravidla pro všechny texty: piš jen to, co přímo vyplývá z citovaného textu. Žádná hodnoticí ani expresivní slova, žádné spekulace o motivech, žádná jména osob ani firem, která v textu nejsou. „souvisi_s_predmetem“ dej false jen tehdy, když změna nemá s předmětem ani názvem návrhu nic společného; změny zákonů, které název návrhu výslovně ohlašuje („a další související zákony“), za nesouvisející nepovažuj.
 "zavaznost" je celé číslo 0–10 (0 = technická úprava, 10 = závažný procedurální problém).
 "citace" obsahuje 0–3 věty zkopírované z textu přesně znak po znaku (bez úprav a zkracování), první citace má dokládat titulek; pokud nic problematického nenajdeš, dej prázdné pole.
+{IMPACT}
 TXT;
 
     public function __construct(private Db $db, private array $config)
@@ -274,7 +276,16 @@ TXT;
                 return;
             }
         }
-        $result['citace'] = self::verifyQuotes((array)($result['citace'] ?? []), PnText::normativePart((string)$text));
+        $normative = PnText::normativePart((string)$text);
+        $result['citace'] = self::verifyQuotes((array)($result['citace'] ?? []), $normative);
+        // dopad na občany: položky bez ověřené citace se zahodí (do závažnosti dopad nevstupuje)
+        if (array_key_exists('dopad', $result)) {
+            [$result['dopad'], $dropped] = Impact::verify($result['dopad'], $normative);
+            if ($dropped > 0) {
+                $result['upravy'] = array_values(array_unique(array_merge((array)($result['upravy'] ?? []),
+                    ['z dopadu vyřazeny položky bez citace ověřené v textu (' . $dropped . ')'])));
+            }
+        }
         $result = self::sanitize($result);
         // opakovaný běh rychlého modelu u hraničního hodnocení: platí medián běhů a rozbor z běhu,
         // jehož závažnost je mediánu nejblíž (#7 bod 7)
@@ -362,6 +373,10 @@ TXT;
             $value = trim(preg_replace('~\s+~u', ' ', (string)($result[$field] ?? '')) ?? '');
             $result[$field] = mb_strlen($value) > $max ? rtrim(mb_substr($value, 0, $max - 1)) . '…' : $value;
         }
+        // dopad na občany: skupiny jen z číselníku, položky jen s citací (jen u rozborů, které dopad mají)
+        if (array_key_exists('dopad', $result)) {
+            $result['dopad'] = Impact::normalize($result['dopad']);
+        }
         if ($notes !== []) {
             $result['upravy'] = array_values(array_unique(array_merge((array)($result['upravy'] ?? []), $notes)));
         }
@@ -430,7 +445,7 @@ TXT;
             '{HINTS}' => self::hints((string)$row['signals']),
             '{TRUNCATED}' => $truncated ? ' (zkráceno)' : '',
             '{TEXT}' => $body,
-            '{FORMAT}' => self::FORMAT,
+            '{FORMAT}' => self::format(),
         ]);
     }
 
@@ -443,8 +458,14 @@ TXT;
             '{HINTS}' => self::hints((string)$row['signals']),
             '{TRUNCATED}' => $truncated ? ' (zkráceno)' : '',
             '{TEXT}' => $body,
-            '{FORMAT}' => self::FORMAT,
+            '{FORMAT}' => self::format(),
         ]);
+    }
+
+    public static function format(): string
+    {
+        // formát odpovědi včetně dopadu na občany (app/Impact.php)
+        return strtr(self::FORMAT, ['{IMPACT_EXAMPLE}' => Impact::FORMAT_EXAMPLE, '{IMPACT}' => Impact::prompt()]);
     }
 
     private static function clip(string $text, int $maxChars): array
