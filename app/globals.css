@@ -1,0 +1,110 @@
+/* Občanská vrstva: papír, inkoust a jeden zvýrazňovač. Nic víc. */
+:root {
+  --paper: #f4f1ea;
+  --ink: #111;
+  --muted: #6b675f;
+  --line: #d9d4c7;
+  --marker: #ffe14d;
+  --display: "Archivo Variable", "Arial Narrow", system-ui, sans-serif;
+  --text: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.5 var(--text); }
+a { color: inherit; text-underline-offset: 3px; }
+mark { background: linear-gradient(transparent 12%, var(--marker) 12%, var(--marker) 88%, transparent 88%); color: inherit; padding: 0 0.08em; }
+main { max-width: 760px; margin: 0 auto; padding: 0 20px 48px; }
+
+.top { max-width: 760px; margin: 0 auto; padding: 18px 20px 0; }
+.brand { font: 800 18px/1 var(--display); font-stretch: 112%; text-decoration: none; letter-spacing: -0.01em; }
+
+/* úvod */
+.hero { padding: 48px 0 28px; }
+.hero h1 { font: 900 clamp(48px, 13vw, 104px)/0.9 var(--display); font-stretch: 125%; letter-spacing: -0.035em; margin: 0; }
+.hero .tag { font: italic 600 clamp(20px, 4.6vw, 28px)/1.2 var(--display); margin: 18px 0 8px; }
+.hero .dry { color: var(--muted); margin: 0; max-width: 34em; }
+
+/* oddíly */
+.section { margin-top: 40px; }
+.section > h2 { font: 800 13px/1 var(--text); letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 4px; }
+.section > .lead { color: var(--muted); margin: 0 0 18px; font-size: 15px; }
+
+/* karta jako list papíru na stohu (vrstvy) */
+.card {
+  display: block; position: relative; background: #fff; border: 1.5px solid var(--ink); border-radius: 4px;
+  padding: 18px 18px 16px; margin: 0 0 22px; text-decoration: none;
+  box-shadow: 5px 5px 0 -1.5px var(--paper), 5px 5px 0 0 var(--ink);
+  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+}
+a.card:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 -1.5px var(--paper), 7px 7px 0 0 var(--ink); }
+a.card:active { transform: translate(1px, 1px); box-shadow: 3px 3px 0 -1.5px var(--paper), 3px 3px 0 0 var(--ink); }
+.card h3 { font: 800 clamp(22px, 5.6vw, 28px)/1.12 var(--display); font-stretch: 108%; letter-spacing: -0.015em; margin: 6px 0 8px; }
+.card .sub { color: var(--muted); font-size: 14px; margin: 0 0 6px; }
+.card .perex { margin: 0 0 12px; }
+.meta { font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.level { font-weight: 700; color: var(--ink); }
+.level-major { background: var(--marker); padding: 1px 6px; border-radius: 3px; }
+
+.groups { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; padding: 0; list-style: none; }
+.groups li { font-size: 13px; font-weight: 600; border: 1px solid var(--ink); border-radius: 99px; padding: 2px 10px; }
+
+/* cesta zákonem */
+.path { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin: 10px 0 6px; }
+.path span { height: 6px; background: var(--line); border-radius: 2px; }
+.path span.done { background: var(--ink); }
+.path span.now { background: var(--ink); box-shadow: 0 0 0 2px var(--marker); }
+.path.stopped span.done, .path.stopped span.now { background: var(--muted); box-shadow: none; }
+.path-labels { display: grid; grid-template-columns: repeat(7, 1fr); font-size: 11px; color: var(--muted); gap: 3px; }
+.path-labels b { color: var(--ink); }
+.next { font-size: 14px; font-weight: 600; margin: 6px 0 0; }
+
+/* filtr Týká se mě */
+.filter { margin: 0 0 22px; }
+.filter summary { cursor: pointer; font-weight: 700; list-style: none; display: inline-flex; gap: 8px; align-items: center; }
+.filter summary::-webkit-details-marker { display: none; }
+.filter summary::after { content: "+"; font-weight: 400; }
+.filter[open] summary::after { content: "−"; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.chips button {
+  font: 600 14px/1 var(--text); color: var(--ink); background: transparent; border: 1.5px solid var(--ink);
+  border-radius: 99px; padding: 9px 14px; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.chips button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.filter .note { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+.empty { color: var(--muted); font-style: italic; }
+
+/* kompaktní seznam */
+.list { list-style: none; margin: 0; padding: 0; border-top: 1.5px solid var(--ink); }
+.list li { border-bottom: 1px solid var(--line); }
+.list a { display: block; padding: 12px 0; text-decoration: none; }
+.list a:hover strong { text-decoration: underline; }
+.list strong { display: block; font: 700 17px/1.25 var(--display); font-stretch: 104%; }
+.list span { font-size: 13px; color: var(--muted); }
+.more summary { cursor: pointer; font-weight: 700; padding: 12px 0; }
+
+/* detail */
+.crumb { font-size: 14px; color: var(--muted); margin: 24px 0 0; }
+.detail h1 { font: 900 clamp(34px, 9vw, 60px)/0.98 var(--display); font-stretch: 112%; letter-spacing: -0.025em; margin: 14px 0 12px; }
+.detail .official { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
+.block { border-top: 1.5px solid var(--ink); padding-top: 14px; margin-top: 30px; }
+.block h2 { font: 800 13px/1 var(--text); letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 12px; }
+.items { list-style: none; margin: 0; padding: 0; }
+.items li { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.items .who { font-weight: 700; }
+.quote summary { cursor: pointer; font-size: 13px; color: var(--muted); margin-top: 4px; display: inline-block; }
+.quote blockquote { margin: 8px 0 0; padding: 8px 12px; background: #fff; border-left: 4px solid var(--marker); font-size: 15px; }
+.guard { font-size: 14px; color: var(--muted); display: block; margin-top: 2px; }
+.small { font-size: 13px; color: var(--muted); }
+.vote { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 14px; border-bottom: 1px solid var(--line); }
+.bar { flex: 1; height: 8px; background: var(--line); border-radius: 2px; overflow: hidden; display: flex; }
+.bar i { display: block; background: var(--ink); }
+.links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.btn { display: inline-block; font-weight: 700; font-size: 15px; text-decoration: none; border: 1.5px solid var(--ink); border-radius: 99px; padding: 9px 16px; background: #fff; }
+.btn:hover { background: var(--marker); }
+
+.foot { max-width: 760px; margin: 0 auto; padding: 24px 20px 40px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+.path-labels span, .path-labels b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.block .items li { font-size: 15px; }
+@media (max-width: 420px) { .path-labels { font-size: 10px; } }
